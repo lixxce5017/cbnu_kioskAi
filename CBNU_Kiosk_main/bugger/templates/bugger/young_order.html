@@ -268,14 +268,15 @@
                                             </button>
                                             <div id="btnWrap">
 
-                <button typ="button" id="popupBtn">세트메뉴</button>
+                                            <button typ="button" id="popupBtn">세트메뉴
+                                            </button>
                                             </div>
+                                            <!---세트메뉴 modal 부분--->
+                                            <div id="modalWrap">
+                                            <div id="modalBody">
 
-                <div id="modalWrap">
-                <div id="modalBody">
-
-                <span id="closeBtn">&times;</span>
-                <p>세트메뉴 변경.</p>
+                                            <span id="closeBtn">&times;</span>
+                                            <p>세트메뉴 변경.</p>
                 <div class="row justify-content-center" id="menu_content--bugger" style="display: auto;">
                 {% for menu in bugger_all %}
                 <div class="col-md-4 col mb-5">
@@ -305,9 +306,10 @@
                     </div>
                 </div>
              {% endfor%}
+                    <!---set menu의 endfor--->
 
                                         </div>
-</div>
+                                        </div>
 
                                         </div>
                                     </div>
@@ -684,11 +686,81 @@
         }
 
 
+
+
+
+
+
+        //세트메뉴
+        let setMenuBtn = document.querySelectorAll('[id^=setMenuBtn]');
+        const modal = document.getElementById('modalWrap');
+
+        const setMenuBtnClickHandle = (e) => {
+         e.preventDefault();
+
+
+        var count = document.querySelector("#headingOne > button > h4 > sup").innerText;
+        count *= 1;
+        document.querySelector("#headingOne > button > h4 > sup").innerText = count + 1;
+
+        // 주문 금액 수정
+        var id = e.target.id.split("--")[1]; // 추가된 부분: 버튼의 ID에서 id 추출
+        // 선택한 음료 카테고리가 cart-list에 없는 경우
+        if (document.getElementById('cart--' + id) == null){
+            let cartListArea = document.getElementById('cart-list');
+            cartListArea.innerHTML += '<div class="row" id="cart--'+ id +'"> \
+                                        <div class="col-7" id="cartElement">'+ id +'</div> \
+                                        <div class="col-1" id="deduct--'+ id +'"><i class="bi bi-dash-circle" style="pointer-events: none;"></i></div> \
+                                        <div class="col-2" id="'+ id +'--count">1</div> \
+                                        <div class="col-1" id="add--'+ id +'"><i class="bi bi-plus-circle" style="pointer-events: none;"></i></div> \
+                                    </div>'
+            // Event Listener 추가
+            let addElementButton = document.querySelectorAll('[id^=add--]');
+            for(let i=0;i<addElementButton.length;i++){
+                addElementButton[i].addEventListener('click', addElementButtonClickHandle);
+            }
+            let deductElementButton = document.querySelectorAll('[id^=deduct--]');
+            for(let i=0;i<deductElementButton.length;i++){
+                deductElementButton[i].addEventListener('click', deductElementButtonClickHandle);
+            }
+
+        }else{
+            // 선택한 음료 카테고리가 cart-list에 있는 경우, 개수 수정
+            var prev_count = document.getElementById(id + '--count').innerText;
+            prev_count *= 1;
+            document.getElementById(id + '--count').innerText = prev_count + 1;
+        }
+        var price = document.getElementById(id + '--price').innerText.split(' ')[0];
+        price = (parseFloat(price) + 1300) * 1; // 수정된 부분: 가격을 숫자로 파싱한 후 계산
+
+        var totalPrice = document.getElementById('total-money').innerText;
+        totalPrice = parseFloat(totalPrice) * 1; // 수정된 부분: 총 금액을 숫자로 파싱
+
+        document.getElementById('total-money').innerHTML = '<h5>' + (totalPrice + price) + '</h5>';
+        modal.style.display = 'none';
 }
 
 for (let i = 0; i < setMenuBtn.length; i++) {
     setMenuBtn[i].addEventListener('click', setMenuBtnClickHandle);
 }
+//세트메뉴 모달창
+const btn = document.getElementById('popupBtn');
+const closeBtn = document.getElementById('closeBtn');
+
+btn.onclick = function() {
+  modal.style.display = 'block';
+}
+
+closeBtn.onclick = function() {
+  modal.style.display = 'none';
+}
+
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+
 
 
     let addCartButton = document.querySelectorAll('[id^=addToCart]');
@@ -747,26 +819,7 @@ for (let i = 0; i < setMenuBtn.length; i++) {
 
 </script>
 <!--세트메뉴 변경 모달 창 js-->
-<script>
-const btn = document.getElementById('popupBtn');
-const modal = document.getElementById('modalWrap');
-const closeBtn = document.getElementById('closeBtn');
 
-btn.onclick = function() {
-  modal.style.display = 'block';
-}
-closeBtn.onclick = function() {
-  modal.style.display = 'none';
-}
-
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-}
-
-
-</script>
 
 
 {% endblock %}
