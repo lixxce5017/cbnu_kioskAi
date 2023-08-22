@@ -18,6 +18,7 @@ class Menu(models.Model):
                     ('drink', 'drink'),
                     ('side', 'side'),
                   ('Whopper', 'Whopper'),
+                  ('set_change','set_change'),
                     )
     class Meta:
         ordering = ['-id']
