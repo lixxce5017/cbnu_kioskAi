@@ -147,6 +147,11 @@
         display: block;
     }
 
+
+
+
+
+
 </style>
 
 <!--세트메뉴 변경 모달 창 css-->
@@ -181,7 +186,7 @@
 
 #modalBody {
   width: 1000px;
-  height: 700px;
+  height: 1000px;
   padding: 30px 30px;
   margin: 0 auto;
   border: 1px solid #777;
@@ -201,14 +206,12 @@
     <div class="row justify-content-center">
         <!-- Portfolio Grid Items-->
         <ul class="tab_title topbar" style="text-align:center;">
-            <li class="on" id="menu_type--bugger">
-                <h3 class="masthead-heading text-center text-uppercase text-white mb-0" style="pointer-events: none; ">버거</h3>
-            </li>
-            <li id="menu_type--Whopper">
+
+            <li class="on" id="menu_type--Whopper">
                 <h3 class="masthead-heading text-center text-uppercase text-white mb-0" style="pointer-events: none; ">Whopper</h3>
             </li>
-            <li id="menu_type--noncoffee">
-                <h3 class="masthead-heading text-center text-uppercase text-white mb-0" style="pointer-events: none; ">Non Coffee</h3>
+            <li id="menu_type--bugger">
+                <h3 class="masthead-heading text-center text-uppercase text-white mb-0" style="pointer-events: none; ">bugger</h3>
             </li>
             <li id="menu_type--smoothie">
                 <h3 class="masthead-heading text-center text-uppercase text-white mb-0" style="pointer-events: none; ">스무디</h3>
@@ -218,109 +221,8 @@
     </div>
     <div class="row justify-content-center">
 
-        <div class="row justify-content-center" id="menu_content--bugger" style="display: auto;">
-            {% for menu in bugger_all %}
-                <div class="col-md-4 col mb-5">
-                    <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal{{menu.id}}">
-                        <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
-                            <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
-                        </div>
-                        <!-- Product image-->
-                        <img class="card-img-top" src="{{menu.image|fix_route|default:'https://dummyimage.com/450x300/dee2e6/6c757d.jpg'}}" alt="..." />
-                        <!-- Product details-->
-                        <div class="card-body p-4">
-                            <div class="text-center">
-                                <!-- Product name-->
-                                <h4 class="fw-bolder">{{menu.title}}</h4>
-                                <!-- Product price-->
-                                <h4 class="fw-normal" id="{{menu.title}}--price">{{menu.price}} 원</h4>
-                                <!-- Product Calorie-->
-                                <h5 class="fw-light text-muted">{{menu.calorie}} Kcal</h5>
-
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
-                <div class="portfolio-modal modal fade" id="portfolioModal{{menu.id}}" tabindex="-1" aria-labelledby="portfolioModal{{menu.id}}" aria-hidden="true">
-                    <div class="modal-dialog modal-xl">
-                        <div class="modal-content">
-                            <div class="modal-header border-0"><button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button></div>
-                            <div class="modal-body text-center pb-5">
-                                <div class="container">
-                                    <div class="row justify-content-center">
-                                        <div class="col-lg-8">
-                                            <!-- Portfolio Modal - Title-->
-                                            <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">{{menu.title}}</h2>
-
-                                            <!-- Portfolio Modal - Image-->
-                                            <img class="img-fluid rounded mb-5" src="{{menu.image|fix_route|default:'https://dummyimage.com/450x300/dee2e6/6c757d.jpg'}}" alt="..." />
-                                            <!-- Portfolio Modal - Text-->
-                                            <p class="mb-4">{{menu.desc}}</p>
-                                            <button class="btn btn-secondary btn-lg" data-bs-dismiss="modal">
-                                                <i class="fas fa-xmark fa-fw"></i>
-                                                뒤로 가기
-                                            </button>
-                                            <button class="btn btn-primary btn-lg" data-bs-dismiss="modal" id="addToCart--{{menu.title}}">
-                                                <i class="fas fa-xmark fa-fw"></i>
-                                                장바구니 담기
-                                            </button>
-                                            <div id="btnWrap">
-
-                                            <button typ="button" id="popupBtn">세트메뉴
-                                            </button>
-                                            </div>
-                                            <!---세트메뉴 modal 부분--->
-                                            <div id="modalWrap">
-                                            <div id="modalBody">
-
-                                            <span id="closeBtn">&times;</span>
-                                            <p>세트메뉴 변경.</p>
-                <div class="row justify-content-center" id="menu_content--bugger" style="display: auto;">
-                {% for menu in bugger_all %}
-                <div class="col-md-4 col mb-5">
-                    <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal{{menu.id}}">
-                        <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
-                            <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
-                        </div>
-                        <!-- Product image-->
-                            <img class="card-img-top" src="{{menu.image|fix_route|default:'https://dummyimage.com/450x300/dee2e6/6c757d.jpg'}}" alt="..." />
-                            <!-- Product details-->
-                                <div class="card-body p-4">
-                                <div class="text-center">
-                                <!-- Product name-->
-                                <h4 class="fw-bolder">{{menu.title}}</h4>
-                                <!-- Product price-->
-                                <h4 class="fw-normal" id="{{menu.title}}--price">{{menu.price}} 원</h4>
-                                <!-- Product Calorie-->
-                                <h5 class="fw-light text-muted">{{menu.calorie}} Kcal</h5>
-                                  <button class="btn btn-primary btn-lg" data-bs-dismiss="modal" id="setMenuBtn--{{menu.title}}">
-                                                <i class="fas fa-xmark fa-fw"></i>
-                                                {{menu.title}}로 변경하기
-                                  </button>
-
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-             {% endfor%}
-                    <!---set menu의 endfor--->
-
-                                        </div>
-                                        </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
-        <div class="row justify-content-center" id="menu_content--Whopper" style="display: none;">
+            <!--와퍼 -->
+        <div class="row justify-content-center" id="menu_content--Whopper" style="display: auto;">
             {% for menu in Whopper_all %}
                 <div class="col-md-4 col mb-5">
                     <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal{{menu.id}}">
@@ -363,6 +265,10 @@
                                                 <i class="fas fa-xmark fa-fw"></i>
                                                 뒤로 가기
                                             </button>
+                                             <button class="btn btn-primary btn-lg" data-bs-dismiss="modal" id="addToCart--{{menu.title}}">
+                                                <i class="fas fa-xmark fa-fw"></i>
+                                                장바구니 담기
+                                            </button>
 
                                         </div>
                                     </div>
@@ -373,6 +279,105 @@
                 </div>
             {% endfor %}
         </div>
+
+        <!--버거-->
+         <div class="row justify-content-center" id="menu_content--bugger" style="display: none;">
+            {% for menu in bugger_all %}
+                <div class="col-md-4 col mb-5">
+                    <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal{{menu.id}}">
+                        <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
+                            <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
+                        </div>
+                        <!-- Product image-->
+                        <img class="card-img-top" src="{{menu.image|fix_route|default:'https://dummyimage.com/450x300/dee2e6/6c757d.jpg'}}" alt="..." />
+                        <!-- Product details-->
+                        <div class="card-body p-4">
+                            <div class="text-center">
+                                <!-- Product name-->
+                                <h4 class="fw-bolder">{{menu.title}}</h4>
+                                <!-- Product price-->
+                                <h4 class="fw-normal" id="{{menu.title}}--price">{{menu.price}} 원</h4>
+                                <!-- Product Calorie-->
+                                <h5 class="fw-light text-muted">{{menu.calorie}} Kcal</h5>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="portfolio-modal modal fade" id="portfolioModal{{menu.id}}" tabindex="-1" aria-labelledby="portfolioModal{{menu.id}}" aria-hidden="true">
+                    <div class="modal-dialog modal-xl">
+                        <div class="modal-content">
+                            <div class="modal-header border-0"><button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button></div>
+                            <div class="modal-body text-center pb-5">
+                                <div class="container">
+                                    <div class="row justify-content-center">
+                                        <div class="col-lg-8">
+                                            <!-- Portfolio Modal - Title-->
+                                            <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">{{menu.title}}</h2>
+
+                                            <!-- Portfolio Modal - Image-->
+                                            <img class="img-fluid rounded mb-5" src="{{menu.image|fix_route|default:'https://dummyimage.com/450x300/dee2e6/6c757d.jpg'}}" alt="..." />
+                                            <!-- Portfolio Modal - Text-->
+                                            <p class="mb-4">{{menu.desc}}</p>
+                                            <button class="btn btn-secondary btn-lg" data-bs-dismiss="modal">
+                                                <i class="fas fa-xmark fa-fw"></i>
+                                                뒤로 가기
+                                            </button>
+                                            <button class="btn btn-primary btn-lg" data-bs-dismiss="modal" id="addToCart--{{menu.title}}">
+                                                <i class="fas fa-xmark fa-fw"></i>
+                                                장바구니 담기
+                                            </button>
+                                            <div id="btnWrap">
+                                                <button typ="button" id="popupBtn">세트메뉴
+                                                </button>
+                                            </div>
+                                            <!---세트메뉴 modal 부분--->
+                                                <div id="modalWrap">
+                                                    <div id="modalBody">
+                                                        <span id="closeBtn">&times;</span>
+                                                        <p>세트메뉴 변경.</p>
+                                                        <div class="row justify-content-center" id="menu_content--bugger" style="display: auto;">
+                                                        {% for menu in bugger_all %}
+                                                            <div class="col-md-4 col mb-5">
+                                                                <div class="portfolio-item mx-auto" data-bs-toggle="modal" >
+                                                                    <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-50 w-50">
+                                                                    <div class="portfolio-item-caption-content text-center text-white">
+                                                                        <i class="fas fa-plus fa-3x"></i>
+                                                                    </div>
+                                                                    </div>
+                                                                    <img class="card-img-top" src="{{menu.image|fix_route|default:'https://dummyimage.com/450x300/dee2e6/6c757d.jpg'}}" alt="...">
+                                                                        <div class="card-body p-4">
+                                                                            <div class="text-center">
+
+                                                                            <h4 class="fw-bolder">{{menu.title}}</h4>
+
+                                                                            <h4 class="fw-normal" id="{{menu.title}}--price">{{menu.price}} 원</h4>
+
+                                                                            <h5 class="fw-light text-muted">{{menu.calorie}} Kcal</h5>
+                                                                            <button class="btn btn-primary btn-lg" data-bs-dismiss="modal" id="setMenuBtn--{{menu.title}}">
+                                                                                <i class="fas fa-xmark fa-fw"></i> {{menu.title}}로 변경하기
+                                                                            </button>
+
+                                                                            </div>
+                                                                        </div>
+
+                                                                </div>
+                                                            </div>
+                                                        {% endfor%}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
         <div class="row justify-content-center" id="menu_content--noncoffee" style="display: none;">
             {% for menu in non_coffee_all %}
                 <div class="col-md-4 col mb-5">
@@ -741,7 +746,9 @@
 }
 
 for (let i = 0; i < setMenuBtn.length; i++) {
-    setMenuBtn[i].addEventListener('click', setMenuBtnClickHandle);
+        setMenuBtn[i].addEventListener('click', (e) => {
+        setMenuBtnClickHandle(e);
+    });
 }
 //세트메뉴 모달창
 const btn = document.getElementById('popupBtn');
@@ -760,6 +767,7 @@ window.onclick = function(event) {
     modal.style.display = "none";
   }
 }
+
 
 
 
@@ -815,10 +823,7 @@ window.onclick = function(event) {
         addCartButton[i].addEventListener('click', addCartButtonClickHandle);
     }
 
-
-
 </script>
-<!--세트메뉴 변경 모달 창 js-->
 
 
 
