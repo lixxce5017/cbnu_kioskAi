@@ -130,7 +130,6 @@ def old_pay(request):
         usage_type = request.POST.get('usage_type')
         menu_list = request.POST.getlist('menu_list')[0].split(",")
         menu_counts = list(map(int, request.POST.getlist('menu_counts')[0].split(",")))
-        customer_obj = Customer.objects.filter(id__exact=request.POST.get('customer_id'))[0]
 
         print(menu_list)
         print(menu_counts)
@@ -140,7 +139,6 @@ def old_pay(request):
             
             order_obj = Order()
             order_obj.menu = menu_obj
-            order_obj.customer = customer_obj
             order_obj.count = cnt
 
             order_obj.created = timezone.datetime.now()
@@ -150,7 +148,6 @@ def old_pay(request):
         
         context['usage_type'] = usage_type
         context['order_id'] = order_list[-1]
-                
         return render(request, "bugger/check.html", context)
 
 def get_face(image):
