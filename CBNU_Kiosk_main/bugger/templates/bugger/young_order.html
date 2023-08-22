@@ -5,6 +5,8 @@
 {% block content %}
 
 
+
+
 <script>
     // GET 방식으로 전송된 데이터 읽기
     $.extend({
@@ -144,6 +146,55 @@
     .tab_cont div.on{
         display: block;
     }
+
+</style>
+
+<!--세트메뉴 변경 모달 창 css-->
+<style>
+    * {
+  padding:0;
+  margin:0;
+  box-sizing: border-box;
+}
+
+#btnWrap {
+  width: 500px;
+  margin: 100px auto;
+}
+#popupBtn {
+  width: 150px;
+  height: 50px;
+  padding: 10px 5px;
+}
+#modalWrap {
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  display: none;
+}
+
+#modalBody {
+  width: 1000px;
+  height: 700px;
+  padding: 30px 30px;
+  margin: 0 auto;
+  border: 1px solid #777;
+  background-color: #fff;
+}
+
+#closeBtn {
+  float:right;
+  font-weight: bold;
+  color: #777;
+  font-size:25px;
+  cursor: pointer;
+}
 </style>
 
 <section class="my-md-5">
@@ -215,10 +266,48 @@
                                                 <i class="fas fa-xmark fa-fw"></i>
                                                 장바구니 담기
                                             </button>
-                                            <button class="btn btn-primary btn-lg" data-bs-dismiss="modal" id="setMenuBtn--{{menu.title}}">
+                                            <div id="btnWrap">
+  <button typ="button" id="popupBtn">세트메뉴</button>
+</div>
+
+<div id="modalWrap">
+    <div id="modalBody">
+
+      <span id="closeBtn">&times;</span>
+      <p>세트메뉴 변경.</p>
+         <div class="row justify-content-center" id="menu_content--bugger" style="display: auto;">
+            {% for menu in bugger_all %}
+                <div class="col-md-4 col mb-5">
+                    <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal{{menu.id}}">
+                        <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
+                            <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
+                        </div>
+                        <!-- Product image-->
+                        <img class="card-img-top" src="{{menu.image|fix_route|default:'https://dummyimage.com/450x300/dee2e6/6c757d.jpg'}}" alt="..." />
+                        <!-- Product details-->
+                        <div class="card-body p-4">
+                            <div class="text-center">
+                                <!-- Product name-->
+                                <h4 class="fw-bolder">{{menu.title}}</h4>
+                                <!-- Product price-->
+                                <h4 class="fw-normal" id="{{menu.title}}--price">{{menu.price}} 원</h4>
+                                <!-- Product Calorie-->
+                                <h5 class="fw-light text-muted">{{menu.calorie}} Kcal</h5>
+                                  <button class="btn btn-primary btn-lg" data-bs-dismiss="modal" id="addToCart--{{menu.title}}">
                                                 <i class="fas fa-xmark fa-fw"></i>
-                                                세트
+                                                {{menu.title}}로 변경하기
                                             </button>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+             {% endfor%}
+
+    </div>
+</div>
+
                                         </div>
                                     </div>
                                 </div>
@@ -271,10 +360,7 @@
                                                 <i class="fas fa-xmark fa-fw"></i>
                                                 뒤로 가기
                                             </button>
-                                            <button class="btn btn-primary btn-lg" data-bs-dismiss="modal" id="addToCart--{{menu.title}}">
-                                                <i class="fas fa-xmark fa-fw"></i>
-                                                장바구니 담기
-                                            </button>
+
                                         </div>
                                     </div>
                                 </div>
@@ -701,8 +787,25 @@ for (let i = 0; i < setMenuBtn.length; i++) {
 
 
 
+</script>
+<!--세트메뉴 변경 모달 창 js-->
+<script>
+    const btn = document.getElementById('popupBtn');
+const modal = document.getElementById('modalWrap');
+const closeBtn = document.getElementById('closeBtn');
 
+btn.onclick = function() {
+  modal.style.display = 'block';
+}
+closeBtn.onclick = function() {
+  modal.style.display = 'none';
+}
 
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
 </script>
 
 
