@@ -156,7 +156,7 @@
 
 <!--세트메뉴 변경 모달 창 css-->
 <style>
-    * {
+ * {
   padding:0;
   margin:0;
   box-sizing: border-box;
@@ -186,7 +186,7 @@
 
 #modalBody {
   width: 1000px;
-  height: 1000px;
+  height: 800px;
   padding: 30px 30px;
   margin: 0 auto;
   border: 1px solid #777;
@@ -213,8 +213,14 @@
             <li id="menu_type--bugger">
                 <h3 class="masthead-heading text-center text-uppercase text-white mb-0" style="pointer-events: none; ">bugger</h3>
             </li>
-            <li id="menu_type--smoothie">
-                <h3 class="masthead-heading text-center text-uppercase text-white mb-0" style="pointer-events: none; ">스무디</h3>
+            <li id="menu_type--side">
+                <h3 class="masthead-heading text-center text-uppercase text-white mb-0" style="pointer-events: none; ">side</h3>
+            </li>
+            <li id="menu_type--Premium">
+                <h3 class="masthead-heading text-center text-uppercase text-white mb-0" style="pointer-events: none; ">Premium</h3>
+            </li>
+            <li id="menu_type--drink">
+                <h3 class="masthead-heading text-center text-uppercase text-white mb-0" style="pointer-events: none; ">drink</h3>
             </li>
         </ul>
 
@@ -253,6 +259,7 @@
                             <div class="modal-body text-center pb-5">
                                 <div class="container">
                                     <div class="row justify-content-center">
+
                                         <div class="col-lg-8">
                                             <!-- Portfolio Modal - Title-->
                                             <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">{{menu.title}}</h2>
@@ -336,9 +343,8 @@
                                                 <div id="modalWrap">
                                                     <div id="modalBody">
                                                         <span id="closeBtn">&times;</span>
-                                                        <p>세트메뉴 변경.</p>
-                                                        <div class="row justify-content-center" id="menu_content--bugger" style="display: auto;">
-                                                        {% for menu in bugger_all %}
+                                                        <div class="row justify-content-center" id="menu_content--Whopper" style="display: auto;">
+                                                            {% for menu in Whopper_all %}
                                                             <div class="col-md-4 col mb-5">
                                                                 <div class="portfolio-item mx-auto" data-bs-toggle="modal" >
                                                                     <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-50 w-50">
@@ -361,7 +367,6 @@
 
                                                                             </div>
                                                                         </div>
-
                                                                 </div>
                                                             </div>
                                                         {% endfor%}
@@ -378,8 +383,8 @@
             {% endfor %}
         </div>
 
-        <div class="row justify-content-center" id="menu_content--noncoffee" style="display: none;">
-            {% for menu in non_coffee_all %}
+        <div class="row justify-content-center" id="menu_content--drink" style="display: none;">
+            {% for menu in drink_all %}
                 <div class="col-md-4 col mb-5">
                     <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal{{menu.id}}">
                         <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
@@ -434,23 +439,26 @@
                 </div>
             {% endfor %}
         </div>
-        <div class="row justify-content-center" id="menu_content--smoothie" style="display: none;">
-            {% for menu in smoothie_all %}
-                <div class="col-md-4 col mb-5">
+
+
+          <div class="row justify-content-center" id="menu_content--Premium" style="display: none;">
+            {% for menu in Premium_all %}
+                <div class="col-md-4 col">
                     <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal{{menu.id}}">
                         <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                             <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
                         </div>
                         <!-- Product image-->
-                        <img class="card-img-top" src="{{menu.image|fix_route|default:'https://dummyimage.com/450x300/dee2e6/6c757d.jpg'}}" alt="..." />
+                        <img class="card-img-top" id="{{menu.title}}--image" src="{{menu.image|fix_route|default:'https://dummyimage.com/450x300/dee2e6/6c757d.jpg'}}" alt="..." />
                         <!-- Product details-->
                         <div class="card-body p-4">
                             <div class="text-center">
-                                <!-- Product name-->
-                                <h4 class="fw-bolder">{{menu.title}}</h4>
-                                <!-- Product price-->
+
+                                <!-- Menu name-->
+                                <h3 class="fw-bolder">{{menu.title|fix_title|linebreaks}}</h3>
+                                <!-- Menu price-->
                                 <h4 class="fw-normal" id="{{menu.title}}--price">{{menu.price}} 원</h4>
-                                <!-- Product Calorie-->
+                                <!-- Menu Calorie-->
                                 <h5 class="fw-light text-muted">{{menu.calorie}} Kcal</h5>
 
                             </div>
@@ -458,7 +466,7 @@
 
                     </div>
                 </div>
-                <div class="portfolio-modal modal fade" id="portfolioModal{{menu.id}}" tabindex="-1" aria-labelledby="portfolioModal{{menu.id}}" aria-hidden="true">
+                <div class="portfolio-modal modal fade" id="portfolioModal{{menu.id}}" tabindex="2" aria-labelledby="portfolioModal{{menu.id}}" aria-hidden="true">
                     <div class="modal-dialog modal-xl">
                         <div class="modal-content">
                             <div class="modal-header border-0"><button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button></div>
@@ -466,21 +474,93 @@
                                 <div class="container">
                                     <div class="row justify-content-center">
                                         <div class="col-lg-8">
-                                            <!-- Portfolio Modal - Title-->
-                                            <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">{{menu.title}}</h2>
+
 
                                             <!-- Portfolio Modal - Image-->
                                             <img class="img-fluid rounded mb-5" src="{{menu.image|fix_route|default:'https://dummyimage.com/450x300/dee2e6/6c757d.jpg'}}" alt="..." />
-                                            <!-- Portfolio Modal - Text-->
-                                            <p class="mb-4">{{menu.desc}}</p>
-                                            <button class="btn btn-secondary btn-lg" data-bs-dismiss="modal">
-                                                <i class="fas fa-xmark fa-fw"></i>
-                                                뒤로 가기
-                                            </button>
-                                            <button class="btn btn-primary btn-lg" data-bs-dismiss="modal" id="addToCart--{{menu.title}}">
+
+                                            <div style="text-align: left;">
+                                                <!-- Portfolio Modal - Title-->
+                                                <h1 class="menu-modal-title text-secondary text-uppercase">{{menu.title}}</h1>
+                                                <h1 class="menu-modal-en-title text-secondary text-uppercase">{{menu.en_title|default:'치킨&새우'}}</h1><br>
+
+                                                <!-- Portfolio Modal - Text-->
+                                                <p class="mb-4 menu-modal-desc">{{menu.desc}}</p>
+                                            </div>
+                                            <button class="btn btn-in-modal btn-primary" data-bs-dismiss="modal" id="addToCart--{{menu.title}}">
                                                 <i class="fas fa-xmark fa-fw"></i>
                                                 장바구니 담기
                                             </button>
+                                            <div id="btnWrap">
+                                                <button typ="button" id="popupBtn">모달 팝업 띄우기</button>
+                                            </div>
+                                            <div id="modalWrap">
+                                            <div id="modalBody">
+                                              <span id="closeBtn">&times;</span>
+                                              <p>modal-popup 입니다.</p>
+                                            </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="row justify-content-center" id="menu_content--side" style="display: none;">
+            {% for menu in side_all %}
+                <div class="col-md-4 col">
+                    <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal{{menu.id}}">
+                        <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
+                            <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
+                        </div>
+                        <!-- Product image-->
+                        <img class="card-img-top" id="{{menu.title}}--image" src="{{menu.image|fix_route|default:'https://dummyimage.com/450x300/dee2e6/6c757d.jpg'}}" alt="..." />
+                        <!-- Product details-->
+                        <div class="card-body p-4">
+                            <div class="text-center">
+
+                                <!-- Menu name-->
+                                <h3 class="fw-bolder">{{menu.title|fix_title|linebreaks}}</h3>
+                                <!-- Menu price-->
+                                <h4 class="fw-normal" id="{{menu.title}}--price">{{menu.price}} 원</h4>
+                                <!-- Menu Calorie-->
+                                <h5 class="fw-light text-muted">{{menu.calorie}} Kcal</h5>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="portfolio-modal modal fade" id="portfolioModal{{menu.id}}" tabindex="0" aria-labelledby="portfolioModal{{menu.id}}" aria-hidden="true">
+                    <div class="modal-dialog modal-xl">
+                        <div class="modal-content">
+                            <div class="modal-header border-0"><button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button></div>
+                            <div class="modal-body text-center pb-5">
+                                <div class="container">
+                                    <div class="row justify-content-center">
+                                        <div class="col-lg-8">
+
+
+                                            <!-- Portfolio Modal - Image-->
+                                            <img class="img-fluid rounded mb-5" src="{{menu.image|fix_route|default:'https://dummyimage.com/450x300/dee2e6/6c757d.jpg'}}" alt="..." />
+
+                                            <div style="text-align: left;">
+                                                <!-- Portfolio Modal - Title-->
+                                                <h1 class="menu-modal-title text-secondary text-uppercase">{{menu.title}}</h1>
+                                                <h1 class="menu-modal-en-title text-secondary text-uppercase">{{menu.en_title|default:'프리미엄'}}</h1><br>
+
+                                                <!-- Portfolio Modal - Text-->
+                                                <p class="mb-4 menu-modal-desc">{{menu.desc}}</p>
+                                            </div>
+                                            <button class="btn btn-in-modal btn-primary" data-bs-dismiss="modal" id="addToCart--{{menu.title}}">
+                                                <i class="fas fa-xmark fa-fw"></i>
+                                                장바구니 담기
+                                            </button>
+
                                         </div>
                                     </div>
                                 </div>
@@ -699,6 +779,22 @@
         //세트메뉴
         let setMenuBtn = document.querySelectorAll('[id^=setMenuBtn]');
         const modal = document.getElementById('modalWrap');
+        const btn = document.getElementById('popupBtn');
+        const closeBtn = document.getElementById('closeBtn');
+
+            btn.onclick = function() {
+              modal.style.display = 'block';
+            }
+
+            closeBtn.onclick = function() {
+              modal.style.display = 'none';
+            }
+
+            window.onclick = function(event) {
+              if (event.target == modal) {
+                modal.style.display = "none";
+              }
+            }
 
         const setMenuBtnClickHandle = (e) => {
          e.preventDefault();
@@ -750,23 +846,7 @@ for (let i = 0; i < setMenuBtn.length; i++) {
         setMenuBtnClickHandle(e);
     });
 }
-//세트메뉴 모달창
-const btn = document.getElementById('popupBtn');
-const closeBtn = document.getElementById('closeBtn');
 
-btn.onclick = function() {
-  modal.style.display = 'block';
-}
-
-closeBtn.onclick = function() {
-  modal.style.display = 'none';
-}
-
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-}
 
 
 

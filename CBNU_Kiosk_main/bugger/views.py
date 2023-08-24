@@ -89,6 +89,7 @@ def young_order(request):
                   'Premium_all': Menu.objects.filter(type__icontains="Premium"),
                   'side_all': Menu.objects.filter(type__icontains="side"),
                'drink_all': Menu.objects.filter(type__icontains="drink"),
+               'set_change_all': Menu.objects.filter(type__icontains="set_change"),
 
                   }
     print("시작 ",context,"context임")
