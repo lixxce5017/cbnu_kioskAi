@@ -24,7 +24,7 @@ from keras.models import load_model
 import numpy as np
 
 
-MODEL_NAME = "face_10s4.h5" # 모델명 쓰는 곳
+MODEL_NAME = "agebase.h5" # 모델명 쓰는 곳
 MODEL_TYPE = "CNN"
 
 def home(request):
