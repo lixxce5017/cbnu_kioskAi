@@ -151,9 +151,7 @@
 </style>
 
 
-
-
-
+<!--맨 위에 메뉴 바 --->
 
 <section class="my-md-2">
     <div class="row justify-content-center">
@@ -178,9 +176,9 @@
         </ul>
     </div>
 
-
+<!-- 전체 정렬 div--->
  <div class="row justify-content-center">
-
+        <!--와퍼 탭 --->
         <div class="row justify-content-center" id="menu_content--Whopper" style="display: on;">
         {% for menu in Whopper_all %}
             <div class="col-md-2 col-2">
@@ -203,6 +201,7 @@
                     </div>
                 </div>
             </div>
+            <!-- 클릭 하면 뜨는 모달 탭--->
             <div class="portfolio-modal modal fade" id="portfolioModal{{menu.id}}" tabindex="2" aria-labelledby="portfolioModal{{menu.id}}" aria-hidden="true">
                 <div class="modal-dialog modal-xl">
                     <div class="modal-content">
@@ -293,6 +292,7 @@
                     </div>
         {% endfor %}
     </div>
+     <!-- 버거탭--->
       <div class="row justify-content-center" id="menu_content--bugger" style="display: none;">
         {% for menu in bugger_all %}
             <div class="col-md-2 col-2">
@@ -315,6 +315,7 @@
                     </div>
                 </div>
             </div>
+          <!--클릭하면 뜨는 모달창 --->
             <div class="portfolio-modal modal fade" id="portfolioModal{{menu.id}}" tabindex="2" aria-labelledby="portfolioModal{{menu.id}}" aria-hidden="true">
                 <div class="modal-dialog modal-xl">
                     <div class="modal-content">
@@ -405,6 +406,7 @@
                     </div>
         {% endfor %}
     </div>
+     <!-- 프리미엄--->
       <div class="row justify-content-center" id="menu_content--Premium" style="display: none;">
         {% for menu in Premium_all %}
             <div class="col-md-2 col-2">
@@ -427,6 +429,7 @@
                     </div>
                 </div>
             </div>
+          <!--클릭하면 뜨는 모달창 --->
             <div class="portfolio-modal modal fade" id="portfolioModal{{menu.id}}" tabindex="2" aria-labelledby="portfolioModal{{menu.id}}" aria-hidden="true">
                 <div class="modal-dialog modal-xl">
                     <div class="modal-content">
@@ -517,6 +520,7 @@
                     </div>
         {% endfor %}
     </div>
+     <!-- 사이드 탭--->
       <div class="row justify-content-center" id="menu_content--side" style="display: none;">
         {% for menu in side_all %}
             <div class="col-md-2 col-2">
@@ -571,7 +575,7 @@
             </div>
         {% endfor %}
     </div>
-
+    <!-- 드링크 탭--->
       <div class="row justify-content-center" id="menu_content--drink" style="display: none;">
         {% for menu in drink_all %}
             <div class="col-md-2 col-2">
@@ -727,6 +731,7 @@
     <form id="order_submission" action="{% url 'bugger:old_confirm' %}" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
     </form>
+    <!-- 주문한 상품--->
     <div class="cart-info py-3 bg-secondary">
         <div class="row" id="cart">
             <div class="row" id="headingOne">
