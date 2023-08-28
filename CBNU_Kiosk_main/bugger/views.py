@@ -1,6 +1,9 @@
 #pragma warning (disable:-1072873821)
 
 import os, json, time
+
+from gtts import gTTS
+
 from .models import *
 from os.path import join as pjoin
 import cv2
@@ -13,7 +16,6 @@ from django.conf import settings
 from django.db.models import Count
 
 from django.utils import timezone
-from django.http import JsonResponse
 from django.http import HttpResponse, Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.csrf import csrf_exempt
@@ -22,7 +24,10 @@ from .videocap import MyCamera
 from PIL import Image
 from keras.models import load_model
 import numpy as np
-
+from django.shortcuts import render
+from django.http import FileResponse
+from gtts import gTTS
+import os
 
 MODEL_NAME = "agebase.h5" # 모델명 쓰는 곳
 MODEL_TYPE = "CNN"
@@ -32,19 +37,14 @@ def home(request):
 
 
 def old_order(request):
-    #프리미엄으로
-                #(('bugger', " bugger"),
-                    #('Premium', 'Premium'),
-                    #('drink', 'drink'),
-                   # ('side', 'side'),
-                  #('Whopper', 'Whopper'),
-
     context = {'bugger_all': Menu.objects.filter(type__icontains="bugger"),
-                  'Premium_all': Menu.objects.filter(type__icontains="Premium"),
-                  'drink_all': Menu.objects.filter(type__icontains="drink"),
-                  'side_all': Menu.objects.filter(type__icontains="side"),
-                  'Whopper_all': Menu.objects.filter(type__icontains="Whopper"),
-                  }
+               'Whopper_all': Menu.objects.filter(type__icontains="Whopper"),
+               'Premium_all': Menu.objects.filter(type__icontains="Premium"),
+               'side_all': Menu.objects.filter(type__icontains="side"),
+               'drink_all': Menu.objects.filter(type__icontains="drink"),
+               'set_change_all': Menu.objects.filter(type__icontains="set_change"),
+
+               }
 
     page_url = "bugger/old_order.html"
 
@@ -248,5 +248,18 @@ def get_post(request):
         print(age_group)
         return HttpResponse(age_group)
     return render(request, 'bugger\parameter.html', data)
-        
 
+
+def tts_view(request):
+    text = "tts 테스트"
+
+    tts = gTTS(text)
+    tts_file_path = os.path.join(settings.MEDIA_ROOT, "tts_output.mp3")
+    tts.save(tts_file_path)
+
+    response = HttpResponse(content_type="audio/mpeg")
+    with open(tts_file_path, "rb") as f:
+        response.write(f.read())
+
+    response["Content-Disposition"] = 'inline; filename="tts_output.mp3"'
+    return response
