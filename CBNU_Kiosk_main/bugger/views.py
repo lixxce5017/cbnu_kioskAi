@@ -1,6 +1,10 @@
 #pragma warning (disable:-1072873821)
 
 import os, json, time
+from django.shortcuts import render
+from .realtimeapicall import RGspeech
+import time
+from django.http import HttpResponse
 
 from gtts import gTTS
 
@@ -27,7 +31,10 @@ import numpy as np
 from django.shortcuts import render
 from django.http import FileResponse
 from gtts import gTTS
+
 import os
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="C:/Users/lixxc/PycharmProjects/cbnu_kioskAi/CBNU_Kiosk_main/secret-medium-397401-016382934079.json"
+print(os.environ["GOOGLE_APPLICATION_CREDENTIALS"])
 
 MODEL_NAME = "agebase.h5" # 모델명 쓰는 곳
 MODEL_TYPE = "CNN"
@@ -263,3 +270,17 @@ def tts_view(request):
 
     response["Content-Disposition"] = 'inline; filename="tts_output.mp3"'
     return response
+
+
+def apic(request): #api 호출 함수
+    gsp = RGspeech()
+    while True:
+            # 음성 인식 될때까지 대기 한다.
+        stt = gsp.getText()
+        if stt is None:
+            break
+        print(stt)
+        time.sleep(0.01)
+        break
+
+    return HttpResponse(str(stt))

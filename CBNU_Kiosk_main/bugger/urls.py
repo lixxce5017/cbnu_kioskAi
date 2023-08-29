@@ -12,7 +12,8 @@ urlpatterns = [
     path('img_post', views.get_post),
     path('camera', views.camera, name='camera'),
     path('check', views.check, name='check'),
-    path('tts_view', views.tts_view, name='tts_view')
+    path('tts_view', views.tts_view, name='tts_view'),
+    path('apic', views.apic, name='apic'),
 ]
 
 
