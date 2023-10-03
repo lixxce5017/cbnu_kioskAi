@@ -2,7 +2,7 @@
 from django.urls import path, include
 
 from . import views
-app_name = 'bugger'
+app_name ='bugger'
 urlpatterns = [
     path('', views.home, name='home'),
     path('young_order', views.young_order, name='young_order'),
@@ -12,7 +12,7 @@ urlpatterns = [
     path('img_post', views.get_post),
     path('camera', views.camera, name='camera'),
     path('check', views.check, name='check'),
-    path('tts_view', views.tts_view, name='tts_view'),
+    path('text_to_speech', views.text_to_speech, name='text_to_speech'),
     path('apic', views.apic, name='apic'),
 ]
 

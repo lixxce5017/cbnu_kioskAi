@@ -20,10 +20,6 @@
 from __future__ import division
 
 import re
-import os
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="C:/Users/lixxc/PycharmProjects/cbnu_kioskAi/CBNU_Kiosk_main/secret-medium-397401-016382934079.json"
-print(os.environ["GOOGLE_APPLICATION_CREDENTIALS"])
-
 import sys
 
 from google.cloud import speech

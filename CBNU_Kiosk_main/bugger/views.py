@@ -4,6 +4,10 @@ import os, json, time
 from django.shortcuts import render
 from .realtimeapicall import RGspeech
 import time
+from django.shortcuts import render
+from django.http import JsonResponse
+from google.cloud import texttospeech
+from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 
 from gtts import gTTS
@@ -33,7 +37,7 @@ from django.http import FileResponse
 from gtts import gTTS
 
 import os
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="C:/Users/lixxc/PycharmProjects/cbnu_kioskAi/CBNU_Kiosk_main/secret-medium-397401-016382934079.json"
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="C:/Users/lixxc/PycharmProjects/cbnu_kioskAi/CBNU_Kiosk_main/realnew-399713-2378aee3660a.json"
 print(os.environ["GOOGLE_APPLICATION_CREDENTIALS"])
 
 MODEL_NAME = "agebase.h5" # 모델명 쓰는 곳
@@ -257,30 +261,36 @@ def get_post(request):
     return render(request, 'bugger\parameter.html', data)
 
 
-def tts_view(request):
-    text = "tts 테스트"
+def text_to_speech(request):
+    text = "안녕하세요, Google Cloud Text-to-Speech API 테스트입니다."
 
-    tts = gTTS(text)
-    tts_file_path = os.path.join(settings.MEDIA_ROOT, "tts_output.mp3")
-    tts.save(tts_file_path)
+    # Google Cloud Text-to-Speech API 클라이언트 설정
+    client = texttospeech.TextToSpeechClient()
 
-    response = HttpResponse(content_type="audio/mpeg")
-    with open(tts_file_path, "rb") as f:
-        response.write(f.read())
+    # 텍스트를 음성으로 변환
+    synthesis_input = texttospeech.SynthesisInput(text=text)
+    voice = texttospeech.VoiceSelectionParams(
+        language_code="ko-KR", ssml_gender=texttospeech.SsmlVoiceGender.NEUTRAL
+    )
+    audio_config = texttospeech.AudioConfig(
+        audio_encoding=texttospeech.AudioEncoding.LINEAR16
+    )
 
-    response["Content-Disposition"] = 'inline; filename="tts_output.mp3"'
-    return response
+    response = client.synthesize_speech(
+        input=synthesis_input, voice=voice, audio_config=audio_config
+    )
+
+    # 오디오 데이터를 HTML 템플릿으로 전달
+    audio_data = response.audio_content.decode("utf-8")  # 오디오 데이터를 문자열로 디코딩
+
+    return render(request, "text_to_speech.html", {"audio_data": audio_data})
 
 
-def apic(request): #api 호출 함수
-    gsp = RGspeech()
-    while True:
-            # 음성 인식 될때까지 대기 한다.
-        stt = gsp.getText()
-        if stt is None:
-            break
-        print(stt)
-        time.sleep(0.01)
-        break
-
-    return HttpResponse(str(stt))
+@csrf_exempt
+def apic(request):
+    gsp = RGspeech()  # 음성 인식을 수행하는 객체
+    stt = gsp.getText()  # 음성 인식 결과를 가져옴
+    if stt:
+        return JsonResponse({'stt': stt})
+    else:
+        return JsonResponse({'stt': ''})

@@ -1,58 +1,30 @@
-#!/usr/bin/env python
+from google.cloud import texttospeech
 
-# Copyright 2016 Google Inc. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+# 서비스 계정 키 파일 경로 설정
+import os
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="C:/Users/lixxc/PycharmProjects/cbnu_kioskAi/CBNU_Kiosk_main/realnew-399713-2378aee3660a.json"
+print(os.environ["GOOGLE_APPLICATION_CREDENTIALS"])
+key_file_path = "C:/Users/lixxc/PycharmProjects/cbnu_kioskAi/CBNU_Kiosk_main/realnew-399713-2378aee3660a.json"
+# 텍스트를 음성으로 변환하는 함수 정의
+def text_to_speech(text, output_file, language_code="en-US"):
+    client = texttospeech.TextToSpeechClient.from_service_account_file(key_file_path)
 
+    input_text = texttospeech.SynthesisInput(text=text)
 
-def run_quickstart():
-    # [START speech_quickstart]
-    import io
-    import os
+    voice = texttospeech.VoiceSelectionParams(
+        language_code=language_code, ssml_gender=texttospeech.SsmlVoiceGender.NEUTRAL
+    )
 
-    # Imports the Google Cloud client library
-    # [START migration_import]
-    from google.cloud import speech
-    # [END migration_import]
+    audio_config = texttospeech.AudioConfig(audio_encoding=texttospeech.AudioEncoding.LINEAR16)
 
-    # Instantiates a client
-    # [START migration_client]
-    client = speech.SpeechClient()
-    # [END migration_client]
+    response = client.synthesize_speech(input=input_text, voice=voice, audio_config=audio_config)
 
-    # The name of the audio file to transcribe
-    file_name = os.path.join(
-        os.path.dirname(__file__),
-        '.',
-        'voice.wav')
+    with open(output_file, "wb") as out:
+        out.write(response.audio_content)
+        print(f'Audio content written to "{output_file}".')
 
-    # Loads the audio into memory
-    with io.open(file_name, 'rb') as audio_file:
-        content = audio_file.read()
-        audio = speech.RecognitionAudio(content=content)
-
-    config = speech.RecognitionConfig(
-        encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
-        sample_rate_hertz=16000,
-        language_code='ko-KR')
-
-    # Detects speech in the audio file
-    response = client.recognize(config, audio)
-
-    for result in response.results:
-        print('Transcript: {}'.format(result.alternatives[0].transcript))
-    # [END speech_quickstart]
-
-
-if __name__ == '__main__':
-    run_quickstart()
+if __name__ == "__main__":
+    # 텍스트를 음성으로 변환하고 출력 파일로 저장
+    input_text = "Hello, this is a test of the Google Cloud Text-to-Speech API."
+    output_file = "output.wav"
+    text_to_speech(input_text, output_file)

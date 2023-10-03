@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "realnew-399713",
+  "private_key_id": "2378aee3660a7617b69c2c3454282ab409269068",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDorZU3YA2E1xgW\n14PMBrjij9dVlPGyF3468uCLxnDqDml55PGAueyuH/Ma8jJ30ZBgo86M4Ok5pMj3\nvrRui1CFu5VFp44j5PSkXYIRLnqfSMv3vxKvfwbnsgu8xPk6sRTokeTy7F0VzSjd\nQC6focHLbTdxXDl+NuPF/5Ojunfenu8tiupUrBRWjfutWLQ7yDB9SCNs/Iwnvyri\np3cmcKDOMXiiqW0/1IGr07rX5yLsqiYw6HvLGKKZ7lwtk1sVZHDqRZGB+Ir4hey/\nFy5jy5L7RagCnyNg8RuqHuviZzsVqQdFYfQyqQcYS4yAs18uv18jhyHNE9aPDKH5\ndhMcI9wvAgMBAAECggEAG8Ohbg76nf19ROB+PBQYmgRNpCCBP13ZSgHISeAp12v/\n1F6SyL2myyz0eSR/DC1ypm11d08GgBffLod63UP8yEXBbU3YmATj16ccHvO7sxJg\nhaqu+Ueq6cPPmGdX+/5nFHda6U0gsGTKOa3FF8xD+oOznXBtSy0T5yufkOZuaPRg\n0fImb01iLFMiTYFLWeUUGMzW9z0TYadeYHdU0Tn7Ndjp8Xi+TPjcQ++x8mxSZCHw\n3GNLopAKKImZ+Q+6AXP67iUqh8jBeAILQnDV6wCnNmNcOjO4S+N7CwVUTEv2aWlQ\nbjtITric4VI57YBYCUm+bPyrD/UYF9nhxUSOOXUw/QKBgQD74BPv8GFDyjvWeS28\nTmU5WdUQm5XbXR9MZyr5JnRCVQvY62FxyDtLuV6UyHbUR3yHLEYndnW4AakIKcBx\nVCBXCf3ucu/ppKi+LShbO3eHl+mah7ecRVHe40CWrIrIyOTFe76Ysj4PPukllo3P\nvR76aDYieaMaEG+0Mxm33mZTNQKBgQDsfQaHYDYvtyVNzXjj19USbunJcuhdR7z/\nXvdu81FznuomUDCWzBydnKWzJecwK2wwx7q2INN+oR4Ld4cbBD0WqI4Ez0bUuwwL\npDDij0IrSxgulFjsxWRha0ys0BwHctpWSMWWQy1Vh82XyvIsuBNtAZ57SBvP9TXf\nTl+EA2WaUwKBgEzhZLSERuwOOp2Id3FW7IbI6MQc+Wzvy7Hie7d5CVuF4gvgLOoy\nGAdRGZGIbtz0xQntdaxt+BimSRX4yIjPCOAIaL3zz08dt3P1DLBsQlvc/qzwaBcH\nAapq6zgSinom981frBmnrlGw/jE+9yJFs8LzNDLpteMqyS3TuzHobItRAoGACgKI\nwjYqVP61j4OA+HPsSuly79nzR+9/anfElWerLO+vDYwbYmalV26H/Ps/u+Q6oh3y\nIz9kdFmxgd6/Uz9srobX7BAx+VMpgVyjzRMvQ9Hb5izVTsBULWNzTWVJqm8MGtbd\ntiyFwLcM1r36XjY0bErDQIie1MCWVStmE5ppNI0CgYBxvfNUkU+hnFjdqLKkdJlS\nq4kaeWw/JgwtYD1JGV83AOT4wDB9n4QU8sa/UG7wmI2Y00o6RZngz0SChMTwuegp\nYLZ8rkVOQ3g3Wx2/i7j9tgO9Eq9PegfZjgWKLbVcNiez1r7BeETB7Dr5Z+kEIU36\nL6Ih3snLc73gNJJ/O7reKQ==\n-----END PRIVATE KEY-----\n",
+  "client_email": "realnew-speech@realnew-399713.iam.gserviceaccount.com",
+  "client_id": "108224946697759948155",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/realnew-speech%40realnew-399713.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

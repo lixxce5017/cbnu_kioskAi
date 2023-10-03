@@ -97,11 +97,12 @@
 
 
 <style>
+
     .tab_title li {
         list-style: none;
-        color: #fff;
-        background-color: #399B83;
-        border-color: #399B83;
+        color: #000;
+
+
         cursor: pointer;
         padding: 15px 35px;
         display: inline-block;
@@ -111,23 +112,23 @@
 
       }
       .tab_title li:hover {
-        color: #fff;
-        background-color: #4AC4A5;
+        color: #ff0000;
+
         border-color: #15967d;
 
       }
     .tab_title li.on {
-        color: #fff;
-        background-color: #4AC4A5;
+        color: #ff0000;
+
         font-weight: bold;
         border-color: #15967d;
-        box-shadow: 0 0 0 0.25rem rgba(60, 198, 171, 0.5);
+        box-shadow: 0 0.5rem 0 0 rgba(255, 0, 0, 0.5);
 
       }
 
       .tab_title li:disabled, .tab_title li.disabled {
         list-style: none;
-        color: #fff;
+        color: #ff0000;
         background-color: #1abc9c;
         border-color: #1abc9c;
       }
@@ -146,13 +147,21 @@
     .tab_cont div.on{
         display: block;
     }
-
+    img {
+        width : max-content;
+        display : block;
+        margin : auto;
+    }
 
 </style>
 
 
 <!--맨 위에 메뉴 바 --->
-
+<section>
+    <div class="text-light-muted">
+        <img width="820" height="380" src="/static/assets/menu_banner.png" alt="logo" style="border-radius: 0%;"/>
+    </div>
+</section>
 
 <section class="my-md-2">
 
@@ -161,22 +170,23 @@
         <ul class="tab_title topbar" style="text-align:center;">
 
             <li class="on" id="menu_type--Whopper">
-                <h3 class="masthead-heading text-center text-uppercase text-white mb-0" style="pointer-events: none; ">Whopper</h3>
+                <h3 class="masthead-heading text-center text-uppercase text-red mb-0" style="pointer-events: none; ">신제품</h3>
             </li>
             <li id="menu_type--bugger">
-                <h3 class="masthead-heading text-center text-uppercase text-white mb-0" style="pointer-events: none; ">bugger</h3>
+                <h3 class="masthead-heading text-center text-uppercase text-red mb-0" style="pointer-events: none; ">와퍼&주니어</h3>
             </li>
             <li id="menu_type--Premium">
-                <h3 class="masthead-heading text-center text-uppercase text-white mb-0" style="pointer-events: none; ">Premium</h3>
+                <h3 class="masthead-heading text-center text-uppercase text-red mb-0" style="pointer-events: none; ">프리미엄</h3>
             </li>
             <li id="menu_type--side">
-                <h3 class="masthead-heading text-center text-uppercase text-white mb-0" style="pointer-events: none; ">side</h3>
+                <h3 class="masthead-heading text-center text-uppercase text-red mb-0" style="pointer-events: none; ">사이드</h3>
             </li>
             <li id="menu_type--drink">
-                <h3 class="masthead-heading text-center text-uppercase text-white mb-0" style="pointer-events: none; ">drink</h3>
+                <h3 class="masthead-heading text-center text-uppercase text-red mb-0" style="pointer-events: none; ">음료</h3>
             </li>
+
         </ul>
-</nav>
+    </nav>
 <!-- 전체 정렬 div--->
  <div class="row justify-content-center">
         <!--와퍼 탭 --->
@@ -686,7 +696,7 @@
         padding-bottom: 0rem;
       }
     .cart-info {
-        border-radius: 35px 35px 0px 0px;
+
         width: 100%;
         padding: 1rem 1rem;
     }
@@ -697,24 +707,24 @@
         width: 50%;
         text-align: center;
         padding-top: 1rem;
--    }
+    }
     #pay-cancel {
-        color: #fff;
-        background-color: #BEBEBE;
+        color: #000;
+        background-color: #e4e4e4fb;
     }
     #pay {
-        background-color: #FF0000;
+        background-color: #e4e4e4fb;
     }
     #pay-cancel:hover {
-        color: #555555;
-        background-color: #E8E8E8;
+        color: #000;
+        background-color: #e4e4e4fb;
     }
     #pay:hover {
-        color: #fff;
-        background-color: #9B111E;
+        color: #000;
+        background-color: #e4e4e4fb;
     }
     #cart-list > * {
-        color: #fff;
+        color: #000;
         text-align: center;
         font-size: 1.25rem;
         padding-bottom: 0.5rem;
@@ -727,24 +737,25 @@
 
 
 </style>
+
 <!-- 밑에 결제하는 부분 Section-->
 <section class="bottombar">
     <form id="order_submission" action="{% url 'bugger:old_confirm' %}" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
     </form>
     <!-- 주문한 상품--->
-    <div class="cart-info py-3 bg-secondary">
+    <div class="cart-info py-3" style="background-color: #e4e4e4fb">
         <div class="row" id="cart">
             <div class="row" id="headingOne">
                 <button class="btn collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                    <h4 class="text-white fw-bolder">주문한 상품 <sup>0</sup></h4>
+                    <h4 class="text-black fw-bolder">주문한 상품 <sup>0</sup></h4>
                 </button>
             </div>
             <div class="row accordion-collapse collapse" id="collapseOne" aria-labelledby="headingOne" data-bs-parent="#cart">
                 <div class="accordion-body">
-                    <div class="row" id="cart-list">
+                    <div class="row" id="cart-list"><h3>
 
-                    </div>
+                    </div></h3>
                 </div>
             </div>
         </div>
@@ -754,15 +765,15 @@
         <div class="row">
 
             <div id="pay-cancel" class="py-3" OnClick="location.href ='{% url 'bugger:home' %}'" style="cursor:pointer;" >
-                <h5 class="fw-bolder">취소하기</h5>
+                <h4 class="fw-bolder">취소하기</h4>
             </div>
 
             <div id="pay" class="py-3" OnClick="order_now();" style="cursor:pointer;">
                 <div class="row">
-                    <div class="col-5 text-white" style="text-align: left; padding-left: 10%;"><h10>결제하기</h10></div>
-                    <div class="col-1 text-white" style="text-align: left;">￦</div>
-                    <div class="col-3 text-white" id="total-money" style="text-align: right; padding-right: 10%;"><h5>0</h5></div>
-                    <div class="col-3 text-white"><h6><i class="bi bi-chevron-right" style="text-align:left;"></i></h6></div>
+                    <div class="col-5 text-black" style="text-align: left; padding-left: 10%;"><h4>결제하기</h4></div>
+                    <div class="col-1 text-black" style="text-align: left;"><h5>￦</h5></div>
+                    <div class="col-3 text-black" id="total-money" style="text-align: right; padding-right: 10%;"><h5>0</h5></div>
+                    <div class="col-3 text-black"><h6><i class="bi bi-chevron-right" style="text-align:left;"></i></h6></div>
                 </div>
             </div>
         </div>

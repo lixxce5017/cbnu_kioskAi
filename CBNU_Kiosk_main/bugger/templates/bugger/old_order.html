@@ -1,8 +1,87 @@
 {% extends 'index.html' %}
 
+
 {% load post_extras %}
 
 {% block content %}
+
+
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script type="text/javascript">
+        var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+        function csrfSafeMethod(method) {
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+        $.ajaxSetup({
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
+
+        function startSpeechRecognition() {
+            $.ajax({
+                url: "{% url 'bugger:apic' %}",
+                type: "post",
+            }).done(function (data) {
+                if (data.stt !== '') {
+                    document.getElementById('stt').innerHTML = data.stt;
+                    if (data.stt === '홈으로') {
+                        // "홈으로"가 입력되면 홈 페이지로 이동
+                        location.href = '{% url 'bugger:home' %}';
+                    } else if (data.stt === '버거') {
+                        // "버거"가 입력되면 "bugger" 메뉴만 보이도록 설정
+                        document.getElementById('menu_content--bugger').style.display = 'block';
+                        document.getElementById('menu_content--Whopper').style.display = 'none';
+                        document.getElementById('menu_content--Premium').style.display = 'none';
+                        document.getElementById('menu_content--drink').style.display = 'none';
+                        document.getElementById('menu_content--side').style.display = 'none';
+                    }
+                     else if (data.stt === '프리미엄') {
+                        document.getElementById('menu_content--Premium').style.display = 'block';
+                         document.getElementById('menu_content--Whopper').style.display = 'none';
+                        document.getElementById('menu_content--bugger').style.display = 'none';
+                        document.getElementById('menu_content--drink').style.display = 'none';
+                        document.getElementById('menu_content--side').style.display = 'none';
+                    }
+                     else if (data.stt === '사이드') {
+
+                        document.getElementById('menu_content--side').style.display = 'block';
+                         document.getElementById('menu_content--Whopper').style.display = 'none';
+                        document.getElementById('menu_content--bugger').style.display = 'none';
+                        document.getElementById('menu_content--drink').style.display = 'none';
+                        document.getElementById('menu_content--Premium').style.display = 'none';
+                    }
+                     else if (data.stt === '음료') {
+                        document.getElementById('menu_content--drink').style.display = 'block';
+                        document.getElementById('menu_content--Whopper').style.display = 'none';
+                        document.getElementById('menu_content--bugger').style.display = 'none';
+                        document.getElementById('menu_content--side').style.display = 'none';
+                        document.getElementById('menu_content--Premium').style.display = 'none';
+
+                    }
+                    else if (data.stt === '와퍼') {
+                        document.getElementById('menu_content--Whopper').style.display = 'block';
+                        document.getElementById('menu_content--drink').style.display = 'none';
+                        document.getElementById('menu_content--bugger').style.display = 'none';
+                        document.getElementById('menu_content--side').style.display = 'none';
+                        document.getElementById('menu_content--Premium').style.display = 'none';
+
+                    }
+
+
+
+                }
+                startSpeechRecognition(); // 계속해서 음성 인식 요청을 보냅니다.
+            });
+        }
+
+        // 페이지 로드 시 음성 인식을 시작합니다.
+        $(document).ready(function () {
+            startSpeechRecognition();
+        });
+    </script>
 
 
 
@@ -155,17 +234,31 @@
 
 
 <section class="my-md-2">
+
+    <nav class="navbar-expand-lg order-py-5">
         <!-- Portfolio Grid Items-->
+        <ul class="tab_title topbar" style="text-align:center;">
 
-
- <audio controls autoplay>
-        <source src="{% url 'bugger:tts_view' %}" type="audio/mpeg">
-        Your browser does not support the audio element.
-    </audio>
-
+            <li class="on" id="menu_type--Whopper">
+                <h3 class="masthead-heading text-center text-uppercase text-white mb-0" style="pointer-events: none; ">Whopper</h3>
+            </li>
+            <li id="menu_type--bugger">
+                <h3 class="masthead-heading text-center text-uppercase text-white mb-0" style="pointer-events: none; ">bugger</h3>
+            </li>
+            <li id="menu_type--Premium">
+                <h3 class="masthead-heading text-center text-uppercase text-white mb-0" style="pointer-events: none; ">Premium</h3>
+            </li>
+            <li id="menu_type--side">
+                <h3 class="masthead-heading text-center text-uppercase text-white mb-0" style="pointer-events: none; ">side</h3>
+            </li>
+            <li id="menu_type--drink">
+                <h3 class="masthead-heading text-center text-uppercase text-white mb-0" style="pointer-events: none; ">drink</h3>
+            </li>
+        </ul>
+</nav>
 <!-- 전체 정렬 div--->
- <div class="row justify-content-center">
-        <!--와퍼 탭 --->
+
+<div id="stt"></div>
         <div class="row justify-content-center" id="menu_content--Whopper" style="display: on;">
         {% for menu in Whopper_all %}
             <div class="col-md-2 col-2">
@@ -617,63 +710,8 @@
             </div>
         {% endfor %}
     </div>
-     <a href="javascript:void(0);" onclick="apic();">페이지 이동 없이 api 호출</a>
 </div>
 
-<div class="bottombar">
-    <form id="order_submission" action="{% url 'bugger:old_confirm' %}" method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-    </form>
-    <div class="cart-info py-3 bg-secondary">
-        <div class="row" id="cart">
-            <div class="row" id="headingOne">
-                <button class="btn collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                    <h4 class="text-white fw-bolder">주문한 상품 <sup>0</sup></h4>
-                </button>
-            </div>
-            <div class="row accordion-collapse collapse" id="collapseOne" aria-labelledby="headingOne" data-bs-parent="#cart">
-                <div class="accordion-body">
-                    <div class="row" id="cart-list">
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="payment">
-        <div class="row">
-            <div id="pay" class="py-3" OnClick="order_now();" style="cursor:pointer;">
-                <div class="row">
-                    <div class="col-5 text-white" style="text-align: left; padding-left: 10%;"><h10>결제하기</h10></div>
-                    <div class="col-1 text-white" style="text-align: left;">￦</div>
-                    <div class="col-3 text-white" id="total-money" style="text-align: right; padding-right: 10%;"><h5>0</h5></div>
-                    <div class="col-3 text-white"><h6><i class="bi bi-chevron-right" style="text-align:left;"></i></h6></div>
-                </div>
-            </div>
-            <div id="pay-cancel" class="py-3" OnClick="location.href = '{% url 'bugger:home' %}'" style="cursor:pointer;">
-                <h5 class="fw-bolder">취소하기</h5>
-            </div>
-        </div>
-    </div>
-    <ul class="tab_title py-0" style="text-align:center;">
-    <li class="on" id="menu_type--Whopper">
-        <h3 class="masthead-heading text-center text-uppercase text-white mb-0" style="pointer-events: none;">Whopper</h3>
-    </li>
-    <li id="menu_type--bugger">
-        <h3 class="masthead-heading text-center text-uppercase text-white mb-0" style="pointer-events: none;">bugger</h3>
-    </li>
-    <li id="menu_type--Premium">
-        <h3 class="masthead-heading text-center text-uppercase text-white mb-0" style="pointer-events: none;">Premium</h3>
-    </li>
-    <li id="menu_type--side">
-        <h3 class="masthead-heading text-center text-uppercase text-white mb-0" style="pointer-events: none;">side</h3>
-    </li>
-    <li id="menu_type--drink">
-        <h3 class="masthead-heading text-center text-uppercase text-white mb-0" style="pointer-events: none;">drink</h3>
-    </li>
-</ul>
-
-</div>
 
 
 
@@ -768,6 +806,49 @@
 
 
 </style>
+<!-- 밑에 결제하는 부분 Section-->
+<section class="bottombar">
+    <form id="order_submission" action="{% url 'bugger:old_confirm' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+    </form>
+    <!-- 주문한 상품--->
+    <div class="cart-info py-3 bg-secondary">
+        <div class="row" id="cart">
+            <div class="row" id="headingOne">
+                <button class="btn collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    <h4 class="text-white fw-bolder">주문한 상품 <sup>0</sup></h4>
+                </button>
+            </div>
+            <div class="row accordion-collapse collapse" id="collapseOne" aria-labelledby="headingOne" data-bs-parent="#cart">
+                <div class="accordion-body">
+                    <div class="row" id="cart-list">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="payment">
+        <div class="row">
+
+            <div id="pay-cancel" class="py-3" OnClick="location.href ='{% url 'bugger:home' %}'" style="cursor:pointer;" >
+                <h5 class="fw-bolder">취소하기</h5>
+            </div>
+
+            <div id="pay" class="py-3" OnClick="order_now();" style="cursor:pointer;">
+                <div class="row">
+                    <div class="col-5 text-white" style="text-align: left; padding-left: 10%;"><h10>결제하기</h10></div>
+                    <div class="col-1 text-white" style="text-align: left;">￦</div>
+                    <div class="col-3 text-white" id="total-money" style="text-align: right; padding-right: 10%;"><h5>0</h5></div>
+                    <div class="col-3 text-white"><h6><i class="bi bi-chevron-right" style="text-align:left;"></i></h6></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</section>
 
 
 <script>
@@ -952,32 +1033,5 @@ for (let i = 0; i < setMenuBtn.length; i++) {
     }
 
 </script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-<script type="text/javascript">
-    var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
-function csrfSafeMethod(method) {
-    // these HTTP methods do not require CSRF protection
-    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-}
-$.ajaxSetup({
-    beforeSend: function (xhr, settings) {
-        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-            xhr.setRequestHeader("X-CSRFToken", csrftoken);
-        }
-    }
-});
-
-function apic(){
-    $.ajax({
-    url : "{% url 'bugger:apic' %}",
-    type : "post",
-    }).done(function (data) {
-        document.getElementById('stt').innerHTML = data;
-    });
-
-}
-
-</script>
-
 
 {% endblock %}
