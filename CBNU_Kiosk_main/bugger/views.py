@@ -2,6 +2,8 @@
 
 import os, json, time
 from django.shortcuts import render
+from django.views.decorators.http import require_POST
+
 from .realtimeapicall import RGspeech
 import time
 from django.shortcuts import render
@@ -18,6 +20,9 @@ import cv2
 import joblib
 
 import warnings
+
+from .serializer import MenuSerializer
+
 warnings.filterwarnings(action='ignore')
 
 from django.conf import settings
@@ -35,6 +40,9 @@ import numpy as np
 from django.shortcuts import render
 from django.http import FileResponse
 from gtts import gTTS
+from rest_framework import generics
+from .models import Menu
+
 
 import os
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="C:/Users/lixxc/PycharmProjects/cbnu_kioskAi/CBNU_Kiosk_main/realnew-399713-2378aee3660a.json"
@@ -294,3 +302,19 @@ def apic(request):
         return JsonResponse({'stt': stt})
     else:
         return JsonResponse({'stt': ''})
+
+
+@csrf_exempt
+def get_menu_id_by_name(request):
+    if request.method == 'POST':
+        menu_name = request.POST.get('menu_name')
+        try:
+            menu = Menu.objects.get(title=menu_name)
+            menu_id = menu.id
+            response_data = {'menu_id': menu_id}
+        except Menu.DoesNotExist:
+            response_data = {'error': 'Menu not found'}
+
+        return JsonResponse(response_data)
+    else:
+        return JsonResponse({'error': 'Invalid request method'})

@@ -5,83 +5,100 @@
 
 {% block content %}
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+    var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
 
-     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-    <script type="text/javascript">
-        var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
-        function csrfSafeMethod(method) {
-            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    function csrfSafeMethod(method) {
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    $.ajaxSetup({
+        beforeSend: function (xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
         }
-        $.ajaxSetup({
-            beforeSend: function (xhr, settings) {
-                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+    });
+
+    var isListening = false;
+    var currentMenu = 'Whopper';
+
+    function startSpeechRecognition() {
+    if (!isListening) {
+        isListening = true;
+
+        $.ajax({
+            url: "{% url 'bugger:apic' %}",
+            type: "post",
+        }).done(function (data) {
+            isListening = false;
+
+            if (data.stt !== '') {
+                document.getElementById('stt').innerHTML = data.stt;
+                if (data.stt === '홈으로') {
+                    location.href = '{% url 'bugger:home' %}';
+                } else if (data.stt === '버거') {
+                    showMenu('bugger');
+                } else if (data.stt === '프리미엄') {
+                    showMenu('Premium');
+                } else if (data.stt === '사이드') {
+                    showMenu('side');
+                } else if (data.stt === '음료') {
+                    showMenu('drink');
+                } else if (data.stt === '와퍼') {
+                    showMenu('Whopper');
+                } else if (data.stt === '어쩌구') {
+                    // '어쩌구'인 경우 Django 뷰 함수 호출
+                    $.ajax({
+                        url: "{% url 'bugger:get_menu_id_by_name' %}",
+                        type: "post",
+                        data: {
+                            menu_name: '어쩌구',
+                            csrfmiddlewaretoken: csrftoken,  // CSRF 토큰
+                        },
+                    }).done(function (response) {
+                        // Django 뷰 함수의 응답 처리
+                        if ('menu_id' in response) {
+                            // 메뉴 ID를 얻었을 경우 처리
+                            var menuId = response.menu_id;
+                            // 여기에서 얻은 메뉴 ID를 사용하여 모달 표시 등의 작업 수행
+                            console.log("메뉴 ID:", menuId);
+                        } else {
+                            // 에러 처리
+                            console.error(response.error);
+                        }
+                    });
                 }
             }
-        });
 
-        function startSpeechRecognition() {
-            $.ajax({
-                url: "{% url 'bugger:apic' %}",
-                type: "post",
-            }).done(function (data) {
-                if (data.stt !== '') {
-                    document.getElementById('stt').innerHTML = data.stt;
-                    if (data.stt === '홈으로') {
-                        // "홈으로"가 입력되면 홈 페이지로 이동
-                        location.href = '{% url 'bugger:home' %}';
-                    } else if (data.stt === '버거') {
-                        // "버거"가 입력되면 "bugger" 메뉴만 보이도록 설정
-                        document.getElementById('menu_content--bugger').style.display = 'block';
-                        document.getElementById('menu_content--Whopper').style.display = 'none';
-                        document.getElementById('menu_content--Premium').style.display = 'none';
-                        document.getElementById('menu_content--drink').style.display = 'none';
-                        document.getElementById('menu_content--side').style.display = 'none';
-                    }
-                     else if (data.stt === '프리미엄') {
-                        document.getElementById('menu_content--Premium').style.display = 'block';
-                         document.getElementById('menu_content--Whopper').style.display = 'none';
-                        document.getElementById('menu_content--bugger').style.display = 'none';
-                        document.getElementById('menu_content--drink').style.display = 'none';
-                        document.getElementById('menu_content--side').style.display = 'none';
-                    }
-                     else if (data.stt === '사이드') {
-
-                        document.getElementById('menu_content--side').style.display = 'block';
-                         document.getElementById('menu_content--Whopper').style.display = 'none';
-                        document.getElementById('menu_content--bugger').style.display = 'none';
-                        document.getElementById('menu_content--drink').style.display = 'none';
-                        document.getElementById('menu_content--Premium').style.display = 'none';
-                    }
-                     else if (data.stt === '음료') {
-                        document.getElementById('menu_content--drink').style.display = 'block';
-                        document.getElementById('menu_content--Whopper').style.display = 'none';
-                        document.getElementById('menu_content--bugger').style.display = 'none';
-                        document.getElementById('menu_content--side').style.display = 'none';
-                        document.getElementById('menu_content--Premium').style.display = 'none';
-
-                    }
-                    else if (data.stt === '와퍼') {
-                        document.getElementById('menu_content--Whopper').style.display = 'block';
-                        document.getElementById('menu_content--drink').style.display = 'none';
-                        document.getElementById('menu_content--bugger').style.display = 'none';
-                        document.getElementById('menu_content--side').style.display = 'none';
-                        document.getElementById('menu_content--Premium').style.display = 'none';
-
-                    }
-
-
-
-                }
-                startSpeechRecognition(); // 계속해서 음성 인식 요청을 보냅니다.
-            });
-        }
-
-        // 페이지 로드 시 음성 인식을 시작합니다.
-        $(document).ready(function () {
             startSpeechRecognition();
         });
-    </script>
+    }
+}
+
+    $(document).ready(function () {
+        startSpeechRecognition();
+    });
+    function showMenu(menuId) {
+        var allMenus = ['bugger', 'Premium', 'side', 'drink', 'Whopper'];
+        for (var i = 0; i < allMenus.length; i++) {
+            var menu = document.getElementById('menu_content--' + allMenus[i]);
+            if (menu) {
+                menu.style.display = 'none';
+            }
+        }
+
+        var selectedMenu = document.getElementById('menu_content--' + menuId);
+        if (selectedMenu) {
+            selectedMenu.style.display = 'block';
+        }
+    }
+
+
+</script>
+
+
 
 
 
@@ -235,6 +252,7 @@
 
 <section class="my-md-2">
 
+
     <nav class="navbar-expand-lg order-py-5">
         <!-- Portfolio Grid Items-->
         <ul class="tab_title topbar" style="text-align:center;">
@@ -261,7 +279,7 @@
 <div id="stt"></div>
         <div class="row justify-content-center" id="menu_content--Whopper" style="display: on;">
         {% for menu in Whopper_all %}
-            <div class="col-md-2 col-2">
+            <div class="col-md-4 col-4">
                 <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal{{menu.id}}">
                     <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                         <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
@@ -373,7 +391,7 @@
         {% endfor %}
     </div>
      <!-- 버거탭--->
-      <div class="row justify-content-center" id="menu_content--bugger" style="display: none;">
+          <div class="row justify-content-center" id="menu_content--bugger" style="display: none;">
         {% for menu in bugger_all %}
             <div class="col-md-2 col-2">
                 <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal{{menu.id}}">

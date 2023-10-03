@@ -1,6 +1,5 @@
 
 from django.urls import path, include
-
 from . import views
 app_name ='bugger'
 urlpatterns = [
@@ -14,6 +13,7 @@ urlpatterns = [
     path('check', views.check, name='check'),
     path('text_to_speech', views.text_to_speech, name='text_to_speech'),
     path('apic', views.apic, name='apic'),
+    path('get_menu_id_by_name', views.get_menu_id_by_name, name='get_menu_id_by_name'),
 ]
 
 
