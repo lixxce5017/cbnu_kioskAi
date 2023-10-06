@@ -779,97 +779,7 @@
         document.body.appendChild(form);
         form.submit();
     }
-
-    var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
-
-    function csrfSafeMethod(method) {
-        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-    }
-
-    $.ajaxSetup({
-        beforeSend: function (xhr, settings) {
-            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                xhr.setRequestHeader("X-CSRFToken", csrftoken);
-            }
-        }
-    });
-
-    var isListening = false;
-    var currentMenu = 'Whopper';
-
-    function startSpeechRecognition() {
-        if (!isListening) {
-            isListening = true;
-
-            $.ajax({
-                url: "{% url 'bugger:apic' %}",
-                type: "post",
-            }).done(function (data) {
-                isListening = false;
-
-                if (data.stt !== '') {
-                    document.getElementById('stt').innerHTML = data.stt;
-                    if (data.stt === '홈으로') {
-                        location.href = '{% url 'bugger:home' %}';
-                    } else if (data.stt === '버거') {
-                        showMenu('bugger');
-                    } else if (data.stt === '프리미엄') {
-                        showMenu('Premium');
-                    } else if (data.stt === '사이드') {
-                        showMenu('side');
-                    } else if (data.stt === '음료') {
-                        showMenu('drink');
-                    } else if (data.stt === '와퍼') {
-                        showMenu('Whopper');
-                    } else if (data.stt === '어쩌구') {
-                        // '어쩌구'인 경우 Django 뷰 함수 호출
-                        $.ajax({
-                            url: "{% url 'bugger:get_menu_id_by_name' %}",
-                            type: "post",
-                            data: {
-                                menu_name: '어쩌구',
-                                csrfmiddlewaretoken: csrftoken,  // CSRF 토큰
-                            },
-                        }).done(function (response) {
-                            // Django 뷰 함수의 응답 처리
-                            if ('menu_id' in response) {
-                                // 메뉴 ID를 얻었을 경우 처리
-                                var menuId = response.menu_id;
-                                // 여기에서 얻은 메뉴 ID를 사용하여 모달 표시 등의 작업 수행
-                                console.log("메뉴 ID:", menuId);
-                            } else {
-                                // 에러 처리
-                                console.error(response.error);
-                            }
-                        });
-                    }
-                }
-
-                startSpeechRecognition();
-            });
-        }
-    }
-
-    $(document).ready(function () {
-        startSpeechRecognition();
-    });
-
-    function showMenu(menuId) {
-        var allMenus = ['bugger', 'Premium', 'side', 'drink', 'Whopper'];
-        for (var i = 0; i < allMenus.length; i++) {
-            var menu = document.getElementById('menu_content--' + allMenus[i]);
-            if (menu) {
-                menu.style.display = 'none';
-            }
-        }
-
-        var selectedMenu = document.getElementById('menu_content--' + menuId);
-        if (selectedMenu) {
-            selectedMenu.style.display = 'block';
-        }
-    }
-
-    // 장바구니 내에서 음료 개수 추가 (Plus 버튼 클릭)
+      // 장바구니 내에서 음료 개수 추가 (Plus 버튼 클릭)
     const addElementButtonClickHandle = (e) => {
         if (e.target !== e.currentTarget) return;
         e.preventDefault();
@@ -930,6 +840,8 @@
         document.getElementById('total-money').innerHTML = '<h5>' + (totalPrice - price) + '</h5>';
     }
 
+
+
     let setMenuBtn = document.querySelectorAll('[id^=setMenuBtn]');
 
     const setMenuBtnClickHandle = (e) => {
@@ -974,9 +886,9 @@
 
     for (let i = 0; i < setMenuBtn.length; i++) {
         setMenuBtn[i].addEventListener('click', (e) => {
-            setMenuBtnClickHandle(e);
-        });
-    }
+        setMenuBtnClickHandle(e);
+    });
+}
 
     let addCartButton = document.querySelectorAll('[id^=addToCart]');
 
@@ -1003,6 +915,7 @@
             for (let i = 0; i < deductElementButton.length; i++) {
                 deductElementButton[i].addEventListener('click', deductElementButtonClickHandle);
             }
+
         } else {
             var prev_count = document.getElementById(id + '--count').innerText;
             prev_count *= 1;
@@ -1021,9 +934,146 @@
         document.getElementById('total-money').innerHTML = '<h5>' + (totalPrice + price) + '</h5>';
     }
 
-    for (let i = 0; i < addCartButton.length; i++) {
+ for(let i=0;i<addCartButton.length;i++){
         addCartButton[i].addEventListener('click', addCartButtonClickHandle);
     }
+
+    //stt 장바구니
+    const sttaddCartButtonClickHandle = (id) => {
+    // 'id'를 사용하여 함수를 실행합니다.
+    console.log("add " + id);
+
+    var cartElement = document.getElementById('cart--' + id);
+
+    if (cartElement == null) {
+        let cartListArea = document.getElementById('cart-list');
+        cartListArea.innerHTML += '<div class="row" id="cart--' + id + '"> \
+                                    <div class="col-7" id="cartElement">' + id + '</div> \
+                                    <div class="col-1" id="deduct--' + id + '"><i class="bi bi-dash-circle" style="pointer-events: none;"></i></div> \
+                                    <div class="col-2" id="' + id + '--count">1</div> \
+                                    <div class="col-1" id="add--' + id + '"><i class="bi bi-plus-circle" style="pointer-events: none;"></i></div> \
+                                </div>'
+        // Event Listener 추가
+        let addElementButton = document.querySelectorAll('[id^=add--]');
+        for (let i = 0; i < addElementButton.length; i++) {
+            addElementButton[i].addEventListener('click', addElementButtonClickHandle);
+        }
+        let deductElementButton = document.querySelectorAll('[id^=deduct--]');
+        for (let i = 0; i < deductElementButton.length; i++) {
+            deductElementButton[i].addEventListener('click', deductElementButtonClickHandle);
+        }
+    } else {
+        var prev_count = document.getElementById(id + '--count').innerText;
+        prev_count *= 1;
+        document.getElementById(id + '--count').innerText = prev_count + 1;
+    }
+
+    // 'cartElement'의 존재 여부를 다시 확인합니다.
+    if (cartElement) {
+        var count = document.querySelector("#headingOne > button > h4 > sup").innerText;
+        count *= 1;
+        document.querySelector("#headingOne > button > h4 > sup").innerText = count + 1;
+
+        var price = document.getElementById(id + '--price').innerText.split(' ')[0];
+        price *= 1;
+
+        var totalPrice = document.getElementById('total-money').innerText;
+        totalPrice *= 1;
+        document.getElementById('total-money').innerHTML = '<h5>' + (totalPrice + price) + '</h5>';
+    }
+}
+
+
+    var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+
+    function csrfSafeMethod(method) {
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    $.ajaxSetup({
+        beforeSend: function (xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+
+    var isListening = false;
+    var currentMenu = 'Whopper';
+
+    function startSpeechRecognition() {
+        if (!isListening) {
+            isListening = true;
+
+            $.ajax({
+                url: "{% url 'bugger:apic' %}",
+                type: "post",
+            }).done(function (data) {
+                isListening = false;
+
+                if (data.stt !== '') {
+                    document.getElementById('stt').innerHTML = data.stt;
+                    if (data.stt === '홈으로') {
+                        location.href = '{% url 'bugger:home' %}';
+                    } else if (data.stt === '버거') {
+                        showMenu('bugger');
+                    } else if (data.stt === '프리미엄') {
+                        showMenu('Premium');
+                    } else if (data.stt === '사이드') {
+                        showMenu('side');
+                    } else if (data.stt === '음료') {
+                        showMenu('drink');
+                    } else if (data.stt === '와퍼') {
+                        showMenu('Whopper');
+                    } else if (data.stt === '어쩌구') {
+                        // '어쩌구'인 경우 Django 뷰 함수 호출
+                        $.ajax({
+                            url: "{% url 'bugger:get_menu_id_by_name' %}",
+                            type: "post",
+                            data: {
+                                menu_name: '어쩌구',
+                                csrfmiddlewaretoken: csrftoken,  // CSRF 토큰
+                            },
+                        }).done(function (response) {
+                            // Django 뷰 함수의 응답 처리
+                            if ('menu_id' in response) {
+                                // 메뉴 ID를 얻었을 경우 처리
+                                   var menuId = response.menu_id;
+                                    console.log("메뉴 ID:", menuId);
+                                    sttaddCartButtonClickHandle(menuId);
+                            } else {
+                                // 에러 처리
+                                console.error(response.error);
+                            }
+                        });
+                    }
+                }
+
+                startSpeechRecognition();
+            });
+        }
+    }
+
+    $(document).ready(function () {
+        startSpeechRecognition();
+    });
+
+    function showMenu(menuId) {
+        var allMenus = ['bugger', 'Premium', 'side', 'drink', 'Whopper'];
+        for (var i = 0; i < allMenus.length; i++) {
+            var menu = document.getElementById('menu_content--' + allMenus[i]);
+            if (menu) {
+                menu.style.display = 'none';
+            }
+        }
+
+        var selectedMenu = document.getElementById('menu_content--' + menuId);
+        if (selectedMenu) {
+            selectedMenu.style.display = 'block';
+        }
+    }
+
+
 </script>
 
 
