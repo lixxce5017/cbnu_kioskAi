@@ -318,3 +318,18 @@ def get_menu_id_by_name(request):
         return JsonResponse(response_data)
     else:
         return JsonResponse({'error': 'Invalid request method'})
+from django.core.exceptions import ObjectDoesNotExist
+@csrf_exempt
+def get_menu_info(request):
+    try:
+        menu_id = request.GET.get('menu_id')
+        menu = Menu.objects.get(id=menu_id)
+        menu_info = {
+            'title': menu.title,
+            'image': menu.image.url,
+            'price': menu.price,
+            'calorie': menu.calorie,
+        }
+        return JsonResponse(menu_info)
+    except ObjectDoesNotExist:
+        return JsonResponse({'error': 'Menu not found'})

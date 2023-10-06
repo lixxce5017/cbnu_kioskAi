@@ -5,98 +5,6 @@
 
 {% block content %}
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script type="text/javascript">
-    var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
-
-    function csrfSafeMethod(method) {
-        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-    }
-
-    $.ajaxSetup({
-        beforeSend: function (xhr, settings) {
-            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                xhr.setRequestHeader("X-CSRFToken", csrftoken);
-            }
-        }
-    });
-
-    var isListening = false;
-    var currentMenu = 'Whopper';
-
-    function startSpeechRecognition() {
-    if (!isListening) {
-        isListening = true;
-
-        $.ajax({
-            url: "{% url 'bugger:apic' %}",
-            type: "post",
-        }).done(function (data) {
-            isListening = false;
-
-            if (data.stt !== '') {
-                document.getElementById('stt').innerHTML = data.stt;
-                if (data.stt === '홈으로') {
-                    location.href = '{% url 'bugger:home' %}';
-                } else if (data.stt === '버거') {
-                    showMenu('bugger');
-                } else if (data.stt === '프리미엄') {
-                    showMenu('Premium');
-                } else if (data.stt === '사이드') {
-                    showMenu('side');
-                } else if (data.stt === '음료') {
-                    showMenu('drink');
-                } else if (data.stt === '와퍼') {
-                    showMenu('Whopper');
-                } else if (data.stt === '어쩌구') {
-                    // '어쩌구'인 경우 Django 뷰 함수 호출
-                    $.ajax({
-                        url: "{% url 'bugger:get_menu_id_by_name' %}",
-                        type: "post",
-                        data: {
-                            menu_name: '어쩌구',
-                            csrfmiddlewaretoken: csrftoken,  // CSRF 토큰
-                        },
-                    }).done(function (response) {
-                        // Django 뷰 함수의 응답 처리
-                        if ('menu_id' in response) {
-                            // 메뉴 ID를 얻었을 경우 처리
-                            var menuId = response.menu_id;
-                            // 여기에서 얻은 메뉴 ID를 사용하여 모달 표시 등의 작업 수행
-                            console.log("메뉴 ID:", menuId);
-                        } else {
-                            // 에러 처리
-                            console.error(response.error);
-                        }
-                    });
-                }
-            }
-
-            startSpeechRecognition();
-        });
-    }
-}
-
-    $(document).ready(function () {
-        startSpeechRecognition();
-    });
-    function showMenu(menuId) {
-        var allMenus = ['bugger', 'Premium', 'side', 'drink', 'Whopper'];
-        for (var i = 0; i < allMenus.length; i++) {
-            var menu = document.getElementById('menu_content--' + allMenus[i]);
-            if (menu) {
-                menu.style.display = 'none';
-            }
-        }
-
-        var selectedMenu = document.getElementById('menu_content--' + menuId);
-        if (selectedMenu) {
-            selectedMenu.style.display = 'block';
-        }
-    }
-
-
-</script>
 
 
 
@@ -105,62 +13,7 @@
 
 <script>
     // GET 방식으로 전송된 데이터 읽기
-    $.extend({
-        getUrlVars: function(){
-            var vars = [], hash;
-            var hashes = window.location.href.slice(window.location.href.indexOf('?') +1).split('&');
-            for(var i = 0; i < hashes.length; i++) {
-                hash = hashes[i].split('=');
-                vars.push(hash[0]);
-                vars[hash[0]] = hash[1];
-            }
-            console.log(vars);
-            return vars;
-        },
 
-        getUrlVar: function(name) {
-            return $.getUrlVars()[name];
-        }
-
-    });
-
-    function order_now() {
-        let cart_items = document.querySelectorAll('[id^=cart--]');
-        if (cart_items.length == 0){
-            alert("장바구니가 비어있습니다.");
-            return
-        }
-
-        let menu_list = new Array();
-        let menu_counts = new Array();
-
-        for (let i=0;i<cart_items.length;i++){
-            var menu_id = cart_items[i].id.split("--")[1];
-            var cnt = document.getElementById(menu_id + '--count').innerText * 1;
-            console.log(cnt);
-
-            menu_list.push(menu_id);
-            menu_counts.push(cnt);
-        }
-        var usage_type = $.getUrlVar('usage_type');
-
-        var form = document.getElementById("order_submission");
-        var parm = new Array();
-        parm.push( ['usage_type', usage_type] );
-        parm.push( ['menu_list', menu_list] );
-        parm.push( ['menu_counts', menu_counts] );
-
-        var input = new Array();
-        for (var i = 0; i < parm.length; i++) {
-            input[i] = document.createElement("input");
-            input[i].setAttribute("type", "hidden");
-            input[i].setAttribute('name', parm[i][0]);
-            input[i].setAttribute("value", parm[i][1]);
-            form.appendChild(input[i]);
-        }
-        document.body.appendChild(form);
-        form.submit();
-    }
 
 </script>
 {% comment %} <script>
@@ -868,169 +721,166 @@
 
 </section>
 
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-        // 장바구니 내에서 음료 개수 추가 (Plus 버튼 클릭)
-        const addElementButtonClickHandle = (e) =>{
-            if (e.target !== e.currentTarget) return;
-            e.preventDefault();
+    $.extend({
+        getUrlVars: function(){
+            var vars = [], hash;
+            var hashes = window.location.href.slice(window.location.href.indexOf('?') +1).split('&');
+            for(var i = 0; i < hashes.length; i++) {
+                hash = hashes[i].split('=');
+                vars.push(hash[0]);
+                vars[hash[0]] = hash[1];
+            }
+            console.log(vars);
+            return vars;
+        },
 
-            console.log(e.target.id);
-            let id = e.target.id.split("--")[1];
-            console.log("add" + id);
-
-            var prev_count = document.getElementById(id + '--count').innerText;
-            prev_count *= 1;
-            document.getElementById(id + '--count').innerText = prev_count + 1;
-
-            // 주문한 상품 총 개수 수정
-            var count = document.querySelector("#headingOne > button > h4 > sup").innerText;
-            count *= 1;
-            document.querySelector("#headingOne > button > h4 > sup").innerText = count + 1;
-
-            // 주문 금액 수정
-            var price = document.getElementById(id + '--price').innerText.split(' ')[0];
-            price *= 1;
-
-            var totalPrice = document.getElementById('total-money').innerText;
-            totalPrice *= 1;
-            document.getElementById('total-money').innerHTML = '<h5>' + (totalPrice + price) + '</h5>';
-
-
+        getUrlVar: function(name) {
+            return $.getUrlVars()[name];
         }
 
-        // 장바구니 내에서 음료 개수 빼기 (Minus 버튼 클릭)
-        const deductElementButtonClickHandle = (e) =>{
-            if (e.target !== e.currentTarget) return;
-
-            e.preventDefault();
-
-            console.log(e.target.id);
-            let id = e.target.id.split("--")[1];
-            console.log("deduct " + id);
-
-            var prev_count = document.getElementById(id + '--count').innerText;
-            prev_count *= 1;
-
-            // 1개 남았을 경우, div 삭제
-            if (prev_count == 1){
-                document.getElementById('cart--' + id).remove();
-            }
-            else{
-                document.getElementById(id + '--count').innerText = prev_count - 1;
-            }
-
-            // 주문한 상품 총 개수 수정
-            var count = document.querySelector("#headingOne > button > h4 > sup").innerText;
-            count *= 1;
-            document.querySelector("#headingOne > button > h4 > sup").innerText = count - 1;
-
-            // 주문 금액 수정
-            var price = document.getElementById(id + '--price').innerText.split(' ')[0];
-            price *= 1;
-
-            var totalPrice = document.getElementById('total-money').innerText;
-            totalPrice *= 1;
-            document.getElementById('total-money').innerHTML = '<h5>' + (totalPrice - price) + '</h5>';
-        }
-
-
-
-
-
-
-
-        //세트메뉴
-        let setMenuBtn = document.querySelectorAll('[id^=setMenuBtn]');
-
-        const setMenuBtnClickHandle = (e) => {
-         e.preventDefault();
-
-
-        var count = document.querySelector("#headingOne > button > h4 > sup").innerText;
-        count *= 1;
-        document.querySelector("#headingOne > button > h4 > sup").innerText = count + 1;
-
-        // 주문 금액 수정
-        var id = e.target.id.split("--")[1]; // 추가된 부분: 버튼의 ID에서 id 추출
-        // 선택한 음료 카테고리가 cart-list에 없는 경우
-        if (document.getElementById('cart--' + id) == null){
-            let cartListArea = document.getElementById('cart-list');
-            cartListArea.innerHTML += '<div class="row" id="cart--'+ id +'"> \
-                                        <div class="col-7" id="cartElement">'+ id +'</div> \
-                                        <div class="col-1" id="deduct--'+ id +'"><i class="bi bi-dash-circle" style="pointer-events: none;"></i></div> \
-                                        <div class="col-2" id="'+ id +'--count">1</div> \
-                                        <div class="col-1" id="add--'+ id +'"><i class="bi bi-plus-circle" style="pointer-events: none;"></i></div> \
-                                    </div>'
-            // Event Listener 추가
-            let addElementButton = document.querySelectorAll('[id^=add--]');
-            for(let i=0;i<addElementButton.length;i++){
-                addElementButton[i].addEventListener('click', addElementButtonClickHandle);
-            }
-            let deductElementButton = document.querySelectorAll('[id^=deduct--]');
-            for(let i=0;i<deductElementButton.length;i++){
-                deductElementButton[i].addEventListener('click', deductElementButtonClickHandle);
-            }
-
-        }else{
-            // 선택한 음료 카테고리가 cart-list에 있는 경우, 개수 수정
-            var prev_count = document.getElementById(id + '--count').innerText;
-            prev_count *= 1;
-            document.getElementById(id + '--count').innerText = prev_count + 1;
-        }
-        var price = document.getElementById(id + '--price').innerText.split(' ')[0];
-        price = (parseFloat(price) + 1300) * 1; // 수정된 부분: 가격을 숫자로 파싱한 후 계산
-
-        var totalPrice = document.getElementById('total-money').innerText;
-        totalPrice = parseFloat(totalPrice) * 1; // 수정된 부분: 총 금액을 숫자로 파싱
-
-        document.getElementById('total-money').innerHTML = '<h5>' + (totalPrice + price) + '</h5>';
-        //modal.style.display = 'none';
-}
-
-for (let i = 0; i < setMenuBtn.length; i++) {
-        setMenuBtn[i].addEventListener('click', (e) => {
-        setMenuBtnClickHandle(e);
     });
-}
 
+    function order_now() {
+        let cart_items = document.querySelectorAll('[id^=cart--]');
+        if (cart_items.length == 0){
+            alert("장바구니가 비어있습니다.");
+            return
+        }
 
+        let menu_list = new Array();
+        let menu_counts = new Array();
 
+        for (let i=0;i<cart_items.length;i++){
+            var menu_id = cart_items[i].id.split("--")[1];
+            var cnt = document.getElementById(menu_id + '--count').innerText * 1;
+            console.log(cnt);
 
+            menu_list.push(menu_id);
+            menu_counts.push(cnt);
+        }
+        var usage_type = $.getUrlVar('usage_type');
 
-    let addCartButton = document.querySelectorAll('[id^=addToCart]');
-    // 장바구니 담기 처리
-    const addCartButtonClickHandle = (e) =>{
+        var form = document.getElementById("order_submission");
+        var parm = new Array();
+        parm.push( ['usage_type', usage_type] );
+        parm.push( ['menu_list', menu_list] );
+        parm.push( ['menu_counts', menu_counts] );
+
+        var input = new Array();
+        for (var i = 0; i < parm.length; i++) {
+            input[i] = document.createElement("input");
+            input[i].setAttribute("type", "hidden");
+            input[i].setAttribute('name', parm[i][0]);
+            input[i].setAttribute("value", parm[i][1]);
+            form.appendChild(input[i]);
+        }
+        document.body.appendChild(form);
+        form.submit();
+    }
+
+    var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+
+    function csrfSafeMethod(method) {
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    $.ajaxSetup({
+        beforeSend: function (xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+
+    var isListening = false;
+    var currentMenu = 'Whopper';
+
+    function startSpeechRecognition() {
+        if (!isListening) {
+            isListening = true;
+
+            $.ajax({
+                url: "{% url 'bugger:apic' %}",
+                type: "post",
+            }).done(function (data) {
+                isListening = false;
+
+                if (data.stt !== '') {
+                    document.getElementById('stt').innerHTML = data.stt;
+                    if (data.stt === '홈으로') {
+                        location.href = '{% url 'bugger:home' %}';
+                    } else if (data.stt === '버거') {
+                        showMenu('bugger');
+                    } else if (data.stt === '프리미엄') {
+                        showMenu('Premium');
+                    } else if (data.stt === '사이드') {
+                        showMenu('side');
+                    } else if (data.stt === '음료') {
+                        showMenu('drink');
+                    } else if (data.stt === '와퍼') {
+                        showMenu('Whopper');
+                    } else if (data.stt === '어쩌구') {
+                        // '어쩌구'인 경우 Django 뷰 함수 호출
+                        $.ajax({
+                            url: "{% url 'bugger:get_menu_id_by_name' %}",
+                            type: "post",
+                            data: {
+                                menu_name: '어쩌구',
+                                csrfmiddlewaretoken: csrftoken,  // CSRF 토큰
+                            },
+                        }).done(function (response) {
+                            // Django 뷰 함수의 응답 처리
+                            if ('menu_id' in response) {
+                                // 메뉴 ID를 얻었을 경우 처리
+                                var menuId = response.menu_id;
+                                // 여기에서 얻은 메뉴 ID를 사용하여 모달 표시 등의 작업 수행
+                                console.log("메뉴 ID:", menuId);
+                            } else {
+                                // 에러 처리
+                                console.error(response.error);
+                            }
+                        });
+                    }
+                }
+
+                startSpeechRecognition();
+            });
+        }
+    }
+
+    $(document).ready(function () {
+        startSpeechRecognition();
+    });
+
+    function showMenu(menuId) {
+        var allMenus = ['bugger', 'Premium', 'side', 'drink', 'Whopper'];
+        for (var i = 0; i < allMenus.length; i++) {
+            var menu = document.getElementById('menu_content--' + allMenus[i]);
+            if (menu) {
+                menu.style.display = 'none';
+            }
+        }
+
+        var selectedMenu = document.getElementById('menu_content--' + menuId);
+        if (selectedMenu) {
+            selectedMenu.style.display = 'block';
+        }
+    }
+
+    // 장바구니 내에서 음료 개수 추가 (Plus 버튼 클릭)
+    const addElementButtonClickHandle = (e) => {
+        if (e.target !== e.currentTarget) return;
         e.preventDefault();
 
+        console.log(e.target.id);
         let id = e.target.id.split("--")[1];
-        console.log("add " + id);
+        console.log("add" + id);
 
-        // 선택한 음료 카테고리가 cart-list에 없는 경우
-        if (document.getElementById('cart--' + id) == null){
-            let cartListArea = document.getElementById('cart-list');
-            cartListArea.innerHTML += '<div class="row" id="cart--'+ id +'"> \
-                                        <div class="col-7" id="cartElement">'+ id +'</div> \
-                                        <div class="col-1" id="deduct--'+ id +'"><i class="bi bi-dash-circle" style="pointer-events: none;"></i></div> \
-                                        <div class="col-2" id="'+ id +'--count">1</div> \
-                                        <div class="col-1" id="add--'+ id +'"><i class="bi bi-plus-circle" style="pointer-events: none;"></i></div> \
-                                    </div>'
-            // Event Listener 추가
-            let addElementButton = document.querySelectorAll('[id^=add--]');
-            for(let i=0;i<addElementButton.length;i++){
-                addElementButton[i].addEventListener('click', addElementButtonClickHandle);
-            }
-            let deductElementButton = document.querySelectorAll('[id^=deduct--]');
-            for(let i=0;i<deductElementButton.length;i++){
-                deductElementButton[i].addEventListener('click', deductElementButtonClickHandle);
-            }
-
-        }else{
-            // 선택한 음료 카테고리가 cart-list에 있는 경우, 개수 수정
-            var prev_count = document.getElementById(id + '--count').innerText;
-            prev_count *= 1;
-            document.getElementById(id + '--count').innerText = prev_count + 1;
-        }
+        var prev_count = document.getElementById(id + '--count').innerText;
+        prev_count *= 1;
+        document.getElementById(id + '--count').innerText = prev_count + 1;
 
         // 주문한 상품 총 개수 수정
         var count = document.querySelector("#headingOne > button > h4 > sup").innerText;
@@ -1044,12 +894,138 @@ for (let i = 0; i < setMenuBtn.length; i++) {
         var totalPrice = document.getElementById('total-money').innerText;
         totalPrice *= 1;
         document.getElementById('total-money').innerHTML = '<h5>' + (totalPrice + price) + '</h5>';
-
     }
-    for(let i=0;i<addCartButton.length;i++){
+
+    // 장바구니 내에서 음료 개수 빼기 (Minus 버튼 클릭)
+    const deductElementButtonClickHandle = (e) => {
+        if (e.target !== e.currentTarget) return;
+
+        e.preventDefault();
+
+        console.log(e.target.id);
+        let id = e.target.id.split("--")[1];
+        console.log("deduct " + id);
+
+        var prev_count = document.getElementById(id + '--count').innerText;
+        prev_count *= 1;
+
+        // 1개 남았을 경우, div 삭제
+        if (prev_count == 1) {
+            document.getElementById('cart--' + id).remove();
+        } else {
+            document.getElementById(id + '--count').innerText = prev_count - 1;
+        }
+
+        // 주문한 상품 총 개수 수정
+        var count = document.querySelector("#headingOne > button > h4 > sup").innerText;
+        count *= 1;
+        document.querySelector("#headingOne > button > h4 > sup").innerText = count - 1;
+
+        // 주문 금액 수정
+        var price = document.getElementById(id + '--price').innerText.split(' ')[0];
+        price *= 1;
+
+        var totalPrice = document.getElementById('total-money').innerText;
+        totalPrice *= 1;
+        document.getElementById('total-money').innerHTML = '<h5>' + (totalPrice - price) + '</h5>';
+    }
+
+    let setMenuBtn = document.querySelectorAll('[id^=setMenuBtn]');
+
+    const setMenuBtnClickHandle = (e) => {
+        e.preventDefault();
+
+        var count = document.querySelector("#headingOne > button > h4 > sup").innerText;
+        count *= 1;
+        document.querySelector("#headingOne > button > h4 > sup").innerText = count + 1;
+
+        var id = e.target.id.split("--")[1];
+        if (document.getElementById('cart--' + id) == null) {
+            let cartListArea = document.getElementById('cart-list');
+            cartListArea.innerHTML += '<div class="row" id="cart--' + id + '"> \
+                                        <div class="col-7" id="cartElement">' + id + '</div> \
+                                        <div class="col-1" id="deduct--' + id + '"><i class="bi bi-dash-circle" style="pointer-events: none;"></i></div> \
+                                        <div class="col-2" id="' + id + '--count">1</div> \
+                                        <div class="col-1" id="add--' + id + '"><i class="bi bi-plus-circle" style="pointer-events: none;"></i></div> \
+                                    </div>'
+            // Event Listener 추가
+            let addElementButton = document.querySelectorAll('[id^=add--]');
+            for (let i = 0; i < addElementButton.length; i++) {
+                addElementButton[i].addEventListener('click', addElementButtonClickHandle);
+            }
+            let deductElementButton = document.querySelectorAll('[id^=deduct--]');
+            for (let i = 0; i < deductElementButton.length; i++) {
+                deductElementButton[i].addEventListener('click', deductElementButtonClickHandle);
+            }
+        } else {
+            var prev_count = document.getElementById(id + '--count').innerText;
+            prev_count *= 1;
+            document.getElementById(id + '--count').innerText = prev_count + 1;
+        }
+
+        var price = document.getElementById(id + '--price').innerText.split(' ')[0];
+        price = (parseFloat(price) + 1300) * 1;
+
+        var totalPrice = document.getElementById('total-money').innerText;
+        totalPrice = parseFloat(totalPrice) * 1;
+
+        document.getElementById('total-money').innerHTML = '<h5>' + (totalPrice + price) + '</h5>';
+    }
+
+    for (let i = 0; i < setMenuBtn.length; i++) {
+        setMenuBtn[i].addEventListener('click', (e) => {
+            setMenuBtnClickHandle(e);
+        });
+    }
+
+    let addCartButton = document.querySelectorAll('[id^=addToCart]');
+
+    const addCartButtonClickHandle = (e) => {
+        e.preventDefault();
+
+        let id = e.target.id.split("--")[1];
+        console.log("add " + id);
+
+        if (document.getElementById('cart--' + id) == null) {
+            let cartListArea = document.getElementById('cart-list');
+            cartListArea.innerHTML += '<div class="row" id="cart--' + id + '"> \
+                                        <div class="col-7" id="cartElement">' + id + '</div> \
+                                        <div class="col-1" id="deduct--' + id + '"><i class="bi bi-dash-circle" style="pointer-events: none;"></i></div> \
+                                        <div class="col-2" id="' + id + '--count">1</div> \
+                                        <div class="col-1" id="add--' + id + '"><i class="bi bi-plus-circle" style="pointer-events: none;"></i></div> \
+                                    </div>'
+            // Event Listener 추가
+            let addElementButton = document.querySelectorAll('[id^=add--]');
+            for (let i = 0; i < addElementButton.length; i++) {
+                addElementButton[i].addEventListener('click', addElementButtonClickHandle);
+            }
+            let deductElementButton = document.querySelectorAll('[id^=deduct--]');
+            for (let i = 0; i < deductElementButton.length; i++) {
+                deductElementButton[i].addEventListener('click', deductElementButtonClickHandle);
+            }
+        } else {
+            var prev_count = document.getElementById(id + '--count').innerText;
+            prev_count *= 1;
+            document.getElementById(id + '--count').innerText = prev_count + 1;
+        }
+
+        var count = document.querySelector("#headingOne > button > h4 > sup").innerText;
+        count *= 1;
+        document.querySelector("#headingOne > button > h4 > sup").innerText = count + 1;
+
+        var price = document.getElementById(id + '--price').innerText.split(' ')[0];
+        price *= 1;
+
+        var totalPrice = document.getElementById('total-money').innerText;
+        totalPrice *= 1;
+        document.getElementById('total-money').innerHTML = '<h5>' + (totalPrice + price) + '</h5>';
+    }
+
+    for (let i = 0; i < addCartButton.length; i++) {
         addCartButton[i].addEventListener('click', addCartButtonClickHandle);
     }
-
 </script>
+
+
 
 {% endblock %}
