@@ -320,16 +320,22 @@ def get_menu_id_by_name(request):
         return JsonResponse({'error': 'Invalid request method'})
 from django.core.exceptions import ObjectDoesNotExist
 @csrf_exempt
-def get_menu_info(request):
+
+def get_menu_info_by_name(request):
     try:
-        menu_id = request.GET.get('menu_id')
-        menu = Menu.objects.get(id=menu_id)
+        menu_name = request.POST.get('menu_name')
+        menu = Menu.objects.get(title=menu_name)  # 여기서 적절한 필터링을 사용하여 메뉴를 찾습니다.
+
         menu_info = {
             'title': menu.title,
-            'image': menu.image.url,
             'price': menu.price,
+            'image': menu.image.url,
+            'desc': menu.desc,
+            'type': menu.type,
             'calorie': menu.calorie,
+            'id': menu.id,  # 'menu_id' 키를 추가하고 해당 메뉴의 ID 값을 설정합니다.
         }
+
         return JsonResponse(menu_info)
     except ObjectDoesNotExist:
         return JsonResponse({'error': 'Menu not found'})

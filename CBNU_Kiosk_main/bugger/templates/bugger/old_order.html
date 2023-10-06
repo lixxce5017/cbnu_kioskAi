@@ -939,20 +939,24 @@
     }
 
     //stt 장바구니
-    const sttaddCartButtonClickHandle = (id) => {
-    // 'id'를 사용하여 함수를 실행합니다.
-    console.log("add " + id);
+const sttaddCartButtonClickHandle = (menuInfo) => {
+    // 'menuInfo'를 사용하여 함수를 실행합니다.
+    console.log("add " + menuInfo.title);
 
-    var cartElement = document.getElementById('cart--' + id);
+    // 'menuInfo'의 ID를 사용하여 cartElement를 찾습니다.
+    var cartElement = document.getElementById('cart--' + menuInfo.id);
 
-    if (cartElement == null) {
+    if (cartElement === null) {
         let cartListArea = document.getElementById('cart-list');
-        cartListArea.innerHTML += '<div class="row" id="cart--' + id + '"> \
-                                    <div class="col-7" id="cartElement">' + id + '</div> \
-                                    <div class="col-1" id="deduct--' + id + '"><i class="bi bi-dash-circle" style="pointer-events: none;"></i></div> \
-                                    <div class="col-2" id="' + id + '--count">1</div> \
-                                    <div class="col-1" id="add--' + id + '"><i class="bi bi-plus-circle" style="pointer-events: none;"></i></div> \
-                                </div>'
+        let newCartItem = document.createElement('div');
+        newCartItem.classList.add('row');
+        newCartItem.id = 'cart--' + menuInfo.id; // 'menuInfo'의 ID를 사용합니다.
+        newCartItem.innerHTML = `<div class="col-7" id="cartElement">${menuInfo.title}</div>
+                                <div class="col-1" id="deduct--${menuInfo.id}"><i class="bi bi-dash-circle" style="pointer-events: none;"></i></div>
+                                <div class="col-2" id="${menuInfo.id}--count">1</div>
+                                <div class="col-1" id="add--${menuInfo.id}"><i class="bi bi-plus-circle" style="pointer-events: none;"></i></div>`;
+        cartListArea.appendChild(newCartItem);
+
         // Event Listener 추가
         let addElementButton = document.querySelectorAll('[id^=add--]');
         for (let i = 0; i < addElementButton.length; i++) {
@@ -963,25 +967,37 @@
             deductElementButton[i].addEventListener('click', deductElementButtonClickHandle);
         }
     } else {
-        var prev_count = document.getElementById(id + '--count').innerText;
-        prev_count *= 1;
-        document.getElementById(id + '--count').innerText = prev_count + 1;
+        var prev_count = document.getElementById(menuInfo.id + '--count');
+        if (prev_count !== null) {
+            var currentCount = parseInt(prev_count.innerText);
+            if (!isNaN(currentCount)) {
+                prev_count.innerText = currentCount + 1;
+            }
+        }
     }
 
     // 'cartElement'의 존재 여부를 다시 확인합니다.
-    if (cartElement) {
+    if (cartElement !== null) {
         var count = document.querySelector("#headingOne > button > h4 > sup").innerText;
         count *= 1;
         document.querySelector("#headingOne > button > h4 > sup").innerText = count + 1;
 
-        var price = document.getElementById(id + '--price').innerText.split(' ')[0];
-        price *= 1;
-
-        var totalPrice = document.getElementById('total-money').innerText;
-        totalPrice *= 1;
-        document.getElementById('total-money').innerHTML = '<h5>' + (totalPrice + price) + '</h5>';
+        // 'menuInfo'에서 가격을 가져오기 위해 수정된 부분
+        var price = parseFloat(menuInfo.price);
+        if (!isNaN(price)) {
+            var totalPriceElement = document.getElementById('total-money');
+            var totalPrice = parseFloat(totalPriceElement.innerText);
+            if (!isNaN(totalPrice)) {
+                totalPrice += price;
+                // 텍스트를 업데이트합니다.
+                totalPriceElement.innerHTML = '<h5>' + totalPrice + '</h5>';
+            }
+        }
     }
 }
+
+
+
 
 
     var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
@@ -1001,58 +1017,73 @@
     var isListening = false;
     var currentMenu = 'Whopper';
 
-    function startSpeechRecognition() {
-        if (!isListening) {
-            isListening = true;
+function startSpeechRecognition() {
+    if (!isListening) {
+        isListening = true;
 
-            $.ajax({
-                url: "{% url 'bugger:apic' %}",
-                type: "post",
-            }).done(function (data) {
-                isListening = false;
+        $.ajax({
+            url: "{% url 'bugger:apic' %}",
+            type: "post",
+        }).done(function (data) {
+            isListening = false;
 
-                if (data.stt !== '') {
-                    document.getElementById('stt').innerHTML = data.stt;
-                    if (data.stt === '홈으로') {
-                        location.href = '{% url 'bugger:home' %}';
-                    } else if (data.stt === '버거') {
-                        showMenu('bugger');
-                    } else if (data.stt === '프리미엄') {
-                        showMenu('Premium');
-                    } else if (data.stt === '사이드') {
-                        showMenu('side');
-                    } else if (data.stt === '음료') {
-                        showMenu('drink');
-                    } else if (data.stt === '와퍼') {
-                        showMenu('Whopper');
-                    } else if (data.stt === '어쩌구') {
-                        // '어쩌구'인 경우 Django 뷰 함수 호출
-                        $.ajax({
-                            url: "{% url 'bugger:get_menu_id_by_name' %}",
-                            type: "post",
-                            data: {
-                                menu_name: '어쩌구',
-                                csrfmiddlewaretoken: csrftoken,  // CSRF 토큰
-                            },
-                        }).done(function (response) {
-                            // Django 뷰 함수의 응답 처리
-                            if ('menu_id' in response) {
-                                // 메뉴 ID를 얻었을 경우 처리
-                                   var menuId = response.menu_id;
-                                    console.log("메뉴 ID:", menuId);
-                                    sttaddCartButtonClickHandle(menuId);
-                            } else {
-                                // 에러 처리
-                                console.error(response.error);
-                            }
-                        });
-                    }
-                }
+            if (data.stt !== '') {
+                document.getElementById('stt').innerHTML = data.stt;
+                if (data.stt === '홈으로') {
+                    location.href = '{% url 'bugger:home' %}';
+                } else if (data.stt === '버거') {
+                    showMenu('bugger');
+                } else if (data.stt === '프리미엄') {
+                    showMenu('Premium');
+                } else if (data.stt === '사이드') {
+                    showMenu('side');
+                } else if (data.stt === '음료') {
+                    showMenu('drink');
+                } else if (data.stt === '와퍼') {
+                    showMenu('Whopper');
+                } else if (data.stt === '어쩌구') {
+                    // '어쩌구'인 경우 Django 뷰 함수 호출
+                    $.ajax({
+    url: "{% url 'bugger:get_menu_info_by_name' %}",
+    type: "post",
+    data: {
+        menu_name: '어쩌구',
+        csrfmiddlewaretoken: csrftoken,
+    },
+}).done(function (response) {
+    // Django 뷰 함수의 응답 처리
+    if ('title' in response) {
+        // 메뉴 정보를 얻었을 경우 처리
+        var menuInfo = {
+            title: response.title,
+            price: response.price,
+            image: response.image,
+            desc: response.desc,
+            type: response.type,
+            calorie: response.calorie,
+            id: response.id, // 'menu_id' 대신 'id'를 사용합니다.
+        };
 
-                startSpeechRecognition();
-            });
-        }
+        console.log("메뉴 정보:", menuInfo);
+
+        // DOM 요소에 메뉴 정보를 설정
+
+        sttaddCartButtonClickHandle(menuInfo);
+    } else {
+        // 에러 처리
+        console.error(response.error);
     }
+});
+
+                }
+            }
+
+            startSpeechRecognition(); // 이 부분을 함수 내부에 위치시켜야 합니다.
+        });
+    }
+}
+
+
 
     $(document).ready(function () {
         startSpeechRecognition();
