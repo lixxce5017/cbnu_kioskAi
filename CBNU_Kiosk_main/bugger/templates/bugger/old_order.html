@@ -1071,7 +1071,7 @@ const sttaddCartButtonClickHandle = (menuInfo) => {
         }
     });
 
-    var isListening = false;
+var isListening = false;
 var currentMenu = 'Whopper';
 
 function startSpeechRecognition() {
@@ -1082,8 +1082,6 @@ function startSpeechRecognition() {
             url: "{% url 'bugger:apic' %}",
             type: "post",
         }).done(function (data) {
-            isListening = false;
-
             if (data.stt !== '') {
                 document.getElementById('stt').innerHTML = data.stt;
                 if (data.stt === '홈으로') {
@@ -1130,8 +1128,14 @@ function startSpeechRecognition() {
                             console.error(response.error);
                         }
                     });
+                } else {
+                    // 다른 단어가 입력되었을 때 다시 음성 인식을 시작
+                    isListening = false;
+                    startSpeechRecognition();
                 }
             }
+            isListening = false;
+            startSpeechRecognition();
         });
     }
 }
@@ -1154,6 +1158,7 @@ function showMenu(menuId) {
         selectedMenu.style.display = 'block';
     }
 }
+
 
 
 

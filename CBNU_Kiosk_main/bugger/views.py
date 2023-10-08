@@ -317,11 +317,16 @@ from django.views.decorators.csrf import csrf_exempt
 def apic(request):
     gsp = RGspeech()  # 음성 인식을 수행하는 객체
     stt = gsp.getText()  # 음성 인식 결과를 가져옴
-    if stt:
-        return JsonResponse({'stt': stt})
-    else:
-        return JsonResponse({'stt': ''})
+    is_listening = gsp.status  # 음성 인식 상태
 
+    # 상태와 입력된 음성을 출력
+    print("음성 인식 상태:", is_listening)
+    print("입력된 음성:", stt)
+
+    if stt:
+        return JsonResponse({'stt': stt, 'is_listening': is_listening})
+    else:
+        return JsonResponse({'stt': '', 'is_listening': is_listening})
 
 
 
