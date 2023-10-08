@@ -306,6 +306,13 @@ def text_to_speech(request):
     return render(request, "text_to_speech.html", {"audio_data": audio_data})
 
 
+
+
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+
+
+
 @csrf_exempt
 def apic(request):
     gsp = RGspeech()  # 음성 인식을 수행하는 객체
@@ -314,6 +321,8 @@ def apic(request):
         return JsonResponse({'stt': stt})
     else:
         return JsonResponse({'stt': ''})
+
+
 
 
 @csrf_exempt

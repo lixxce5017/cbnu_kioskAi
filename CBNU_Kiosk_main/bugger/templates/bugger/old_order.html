@@ -997,6 +997,62 @@ function getUrlParameter(name) {
 }
 
 
+const sttaddCartButtonClickHandle = (menuInfo) => {
+    // 'menuInfo'를 사용하여 함수를 실행합니다.
+    console.log("add " + menuInfo.title);
+
+    // 'menuInfo'의 ID를 사용하여 cartElement를 찾습니다.
+    var cartElement = document.getElementById('cart--' + menuInfo.id);
+
+    if (cartElement === null) {
+        let cartListArea = document.getElementById('cart-list');
+        let newCartItem = document.createElement('div');
+        newCartItem.classList.add('row');
+        newCartItem.id = 'cart--' + menuInfo.id; // 'menuInfo'의 ID를 사용합니다.
+        newCartItem.innerHTML = `<div class="col-7">${menuInfo.title}</div>
+                                <div class="col-1" id="deduct--${menuInfo.id}"><i class="bi bi-dash-circle" style="pointer-events: none;"></i></div>
+                                <div class="col-2" id="${menuInfo.id}--count">1</div>
+                                <div class="col-1" id="add--${menuInfo.id}"><i class="bi bi-plus-circle" style="pointer-events: none;"></i></div>`;
+        cartListArea.appendChild(newCartItem);
+
+        // Event Listener 추가
+        let addElementButton = document.querySelectorAll('[id^=add--]');
+        for (let i = 0; i < addElementButton.length; i++) {
+            addElementButton[i].addEventListener('click', addElementButtonClickHandle);
+        }
+        let deductElementButton = document.querySelectorAll('[id^=deduct--]');
+        for (let i = 0; i < deductElementButton.length; i++) {
+            deductElementButton[i].addEventListener('click', deductElementButtonClickHandle);
+        }
+    } else {
+        var prev_count = document.getElementById(menuInfo.id + '--count');
+        if (prev_count !== null) {
+            var currentCount = parseInt(prev_count.innerText);
+            if (!isNaN(currentCount)) {
+                prev_count.innerText = currentCount + 1;
+            }
+        }
+    }
+
+    // 'cartElement'의 존재 여부를 다시 확인합니다.
+    if (cartElement !== null) {
+        var count = document.querySelector("#headingOne > button > h4 > sup").innerText;
+        count *= 1;
+        document.querySelector("#headingOne > button > h4 > sup").innerText = count + 1;
+
+        // 'menuInfo'에서 가격을 가져오기 위해 수정된 부분
+        var price = parseFloat(menuInfo.price);
+        if (!isNaN(price)) {
+            var totalPriceElement = document.getElementById('total-money');
+            var totalPrice = parseFloat(totalPriceElement.innerText);
+            if (!isNaN(totalPrice)) {
+                totalPrice += price;
+                // 텍스트를 업데이트합니다.
+                totalPriceElement.innerHTML = '<h5>' + totalPrice + '</h5>';
+            }
+        }
+    }
+}
 
 
 
@@ -1016,7 +1072,7 @@ function getUrlParameter(name) {
     });
 
     var isListening = false;
-    var currentMenu = 'Whopper';
+var currentMenu = 'Whopper';
 
 function startSpeechRecognition() {
     if (!isListening) {
@@ -1045,65 +1101,60 @@ function startSpeechRecognition() {
                 } else if (data.stt === '어쩌구') {
                     // '어쩌구'인 경우 Django 뷰 함수 호출
                     $.ajax({
-                    url: "{% url 'bugger:get_menu_info_by_name' %}",
-                    type: "post",
-                    data: {
-                        menu_name: '어쩌구',
-                        csrfmiddlewaretoken: csrftoken,
-                    },
-                }).done(function (response) {
-                    // Django 뷰 함수의 응답 처리
-                    if ('title' in response) {
-                        // 메뉴 정보를 얻었을 경우 처리
-                        var menuInfo = {
-                            title: response.title,
-                            price: response.price,
-                            image: response.image,
-                            desc: response.desc,
-                            type: response.type,
-                            calorie: response.calorie,
-                            id: response.id, // 'menu_id' 대신 'id'를 사용합니다.
-                        };
+                        url: "{% url 'bugger:get_menu_info_by_name' %}",
+                        type: "post",
+                        data: {
+                            menu_name: '어쩌구',
+                            csrfmiddlewaretoken: csrftoken,
+                        },
+                    }).done(function (response) {
+                        // Django 뷰 함수의 응답 처리
+                        if ('title' in response) {
+                            // 메뉴 정보를 얻었을 경우 처리
+                            var menuInfo = {
+                                title: response.title,
+                                price: response.price,
+                                image: response.image,
+                                desc: response.desc,
+                                type: response.type,
+                                calorie: response.calorie,
+                                id: response.id, // 'menu_id' 대신 'id'를 사용합니다.
+                            };
 
-                        console.log("메뉴 정보:", menuInfo);
+                            console.log("메뉴 정보:", menuInfo);
 
-                        // DOM 요소에 메뉴 정보를 설정
-
-                        sttaddCartButtonClickHandle(menuInfo);
+                            // DOM 요소에 메뉴 정보를 설정
+                            sttaddCartButtonClickHandle(menuInfo);
                         } else {
                             // 에러 처리
                             console.error(response.error);
                         }
                     });
-
                 }
             }
-
-            startSpeechRecognition(); // 이 부분을 함수 내부에 위치시켜야 합니다.
         });
     }
 }
 
+$(document).ready(function () {
+    startSpeechRecognition();
+});
 
-
-    $(document).ready(function () {
-        startSpeechRecognition();
-    });
-
-    function showMenu(menuId) {
-        var allMenus = ['bugger', 'Premium', 'side', 'drink', 'Whopper'];
-        for (var i = 0; i < allMenus.length; i++) {
-            var menu = document.getElementById('menu_content--' + allMenus[i]);
-            if (menu) {
-                menu.style.display = 'none';
-            }
-        }
-
-        var selectedMenu = document.getElementById('menu_content--' + menuId);
-        if (selectedMenu) {
-            selectedMenu.style.display = 'block';
+function showMenu(menuId) {
+    var allMenus = ['bugger', 'Premium', 'side', 'drink', 'Whopper'];
+    for (var i = 0; i < allMenus.length; i++) {
+        var menu = document.getElementById('menu_content--' + allMenus[i]);
+        if (menu) {
+            menu.style.display = 'none';
         }
     }
+
+    var selectedMenu = document.getElementById('menu_content--' + menuId);
+    if (selectedMenu) {
+        selectedMenu.style.display = 'block';
+    }
+}
+
 
 
 </script>

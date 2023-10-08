@@ -15,6 +15,7 @@ urlpatterns = [
     path('apic', views.apic, name='apic'),
     path('get_menu_id_by_name', views.get_menu_id_by_name, name='get_menu_id_by_name'),
     path('get_menu_info_by_name', views.get_menu_info_by_name, name='get_menu_info_by_name'),
+
 ]
 
 
