@@ -1094,7 +1094,10 @@ function startSpeechRecognition() {
                     showMenu('side');
                 } else if (data.stt === '음료') {
                     showMenu('drink');
-                } else if (data.stt === '와퍼') {
+                }
+                 else if (data.stt === '주문') {
+                    order_now();
+                }else if (data.stt === '와퍼') {
                     showMenu('Whopper');
                 } else if (data.stt === '어쩌구') {
                     // '어쩌구'인 경우 Django 뷰 함수 호출

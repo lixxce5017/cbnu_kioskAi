@@ -15,14 +15,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-
 from __future__ import division
-
+import signal
 import re
 import sys
 
-from google.cloud import speech
 from google.cloud import speech
 import pyaudio
 from six.moves import queue
@@ -32,6 +29,9 @@ import time
 # Audio recording parameters
 RATE = 16000
 CHUNK = int(RATE / 10)  # 100ms
+
+def timeout_handler(signum, frame):
+    raise TimeoutError("Speech-to-Text API call timed out")
 
 class MicrophoneStream(object):
     """Opens a recording stream as a generator yielding the audio chunks."""
@@ -60,30 +60,25 @@ class MicrophoneStream(object):
     def __exit__(self, type, value, traceback):
         self._audio_stream.stop_stream()
         self._audio_stream.close()
-
-
         self.closed = True
         self._buff.put(None)
         self._audio_interface.terminate()
 
     def pause(self):
-        if self.isPause == False:
+        if not self.isPause:
             self.isPause = True
 
-
     def resume(self):
-        if self.isPause == True:
+        if self.isPause:
             self.isPause = False
-
 
     def status(self):
         return self.isPause
 
     def _fill_buffer(self, in_data, frame_count, time_info, status_flags):
-        """Continuously collect data from the audio stream, into the buffer."""
-        if self.isPause == False:
+        """Continuously collect data from the audio stream into the buffer."""
+        if not self.isPause:
             self._buff.put(in_data)
-        #else
         return None, pyaudio.paContinue
 
     def generator(self):
@@ -105,16 +100,15 @@ class MicrophoneStream(object):
 
             yield b''.join(data)
 
-
 # [END audio_stream]
 
-
+# ... (이전 코드 부분)
 
 class RGspeech(Thread):
     def __init__(self):
         Thread.__init__(self)
 
-        self.language_code = 'ko-KR'  # a BCP-47 language tag
+        self.language_code = 'ko-KR'  # BCP-47 언어 태그
 
         self._buff = queue.Queue()
 
@@ -125,7 +119,7 @@ class RGspeech(Thread):
             language_code=self.language_code)
         self.streaming_config = speech.StreamingRecognitionConfig(
             config=self.config,
-            single_utterance=True, # 한 단어 인식 후 종료되도록 추가한 옵션
+            single_utterance=True,  # 한 단어 인식 후 종료되도록 추가한 옵션
             interim_results=True)
 
         self.mic = None
@@ -134,7 +128,7 @@ class RGspeech(Thread):
         self.daemon = True
         self.start()
 
-    def __eixt__(self):
+    def __exit__(self):
         self._buff.put(None)
 
     def run(self):
@@ -144,12 +138,16 @@ class RGspeech(Thread):
             requests = (speech.StreamingRecognizeRequest(audio_content=content)
                         for content in audio_generator)
 
-            responses = self.client.streaming_recognize(self.streaming_config, requests)
+            try:
+                responses = self.client.streaming_recognize(self.streaming_config, requests)
 
-            # Now, put the transcription responses to use.
-            self.listen_print_loop(responses, stream)
-        self._buff.put(None)
-        self.status = False
+                # Now, put the transcription responses to use.
+                self.listen_print_loop(responses, stream)
+            except Exception as e:
+                print("An error occurred:", str(e))
+            finally:
+                self._buff.put(None)
+                self.status = False
 
     def pauseMic(self):
         if self.mic is not None:
@@ -160,7 +158,7 @@ class RGspeech(Thread):
             self.mic.resume()
 
     # 인식된 Text 가져가기
-    def getText(self, block = True):
+    def getText(self, block=True):
         return self._buff.get(block=block)
 
     # 음성인식 처리 루틴
@@ -184,7 +182,19 @@ class RGspeech(Thread):
                     num_chars_printed = len(transcript)
                 else:
                     # 큐에 넣는다.
-                    self._buff.put(transcript+overwrite_chars)
+                    self._buff.put(transcript + overwrite_chars)
                     num_chars_printed = 0
-        except:
-            return
+        except Exception as e:
+            print("An error occurred:", str(e))
+
+# 코드 실행
+if __name__ == '__main__':
+    gsp = RGspeech()  # 음성 인식을 수행하는 객체
+    stt = gsp.getText()  # 음성 인식 결과를 가져옴
+    is_listening = gsp.status  # 음성 인식 상태
+
+    # 상태와 입력된 음성을 출력
+    print("음성 인식 상태:", is_listening)
+    print("입력된 음성:", stt)
+
+    # 필요에 따라 음성 인식 결과를 처리하거나 출력할 수 있습니다.
