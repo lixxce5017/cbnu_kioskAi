@@ -742,43 +742,54 @@
 
     });
 
-    function order_now() {
-        let cart_items = document.querySelectorAll('[id^=cart--]');
-        if (cart_items.length == 0){
-            alert("장바구니가 비어있습니다.");
-            return
-        }
-
-        let menu_list = new Array();
-        let menu_counts = new Array();
-
-        for (let i=0;i<cart_items.length;i++){
-            var menu_id = cart_items[i].id.split("--")[1];
-            var cnt = document.getElementById(menu_id + '--count').innerText * 1;
-            console.log(cnt);
-
-            menu_list.push(menu_id);
-            menu_counts.push(cnt);
-        }
-        var usage_type = $.getUrlVar('usage_type');
-
-        var form = document.getElementById("order_submission");
-        var parm = new Array();
-        parm.push( ['usage_type', usage_type] );
-        parm.push( ['menu_list', menu_list] );
-        parm.push( ['menu_counts', menu_counts] );
-
-        var input = new Array();
-        for (var i = 0; i < parm.length; i++) {
-            input[i] = document.createElement("input");
-            input[i].setAttribute("type", "hidden");
-            input[i].setAttribute('name', parm[i][0]);
-            input[i].setAttribute("value", parm[i][1]);
-            form.appendChild(input[i]);
-        }
-        document.body.appendChild(form);
-        form.submit();
+function order_now() {
+    let cart_items = document.querySelectorAll('[id^=cart--]');
+    if (cart_items.length === 0) {
+        alert("장바구니가 비어있습니다.");
+        return;
     }
+
+    let menu_list = [];
+    let menu_counts = [];
+
+    for (let i = 0; i < cart_items.length; i++) {
+        var menu_id = cart_items[i].id.split("--")[1];
+        var cnt = document.getElementById(menu_id + '--count').innerText * 1;
+        console.log(cnt);
+
+        var menu_title = cart_items[i].querySelector('.col-7').innerText; // 메뉴 제목 가져오기
+        menu_list.push(menu_title);
+        menu_counts.push(cnt);
+    }
+
+    var usage_type = getUrlParameter('usage_type');
+
+    var form = document.getElementById("order_submission");
+    var parm = [];
+    parm.push(['usage_type', usage_type]);
+    parm.push(['menu_list', menu_list.join(',')]);
+    parm.push(['menu_counts', menu_counts.join(',')]);
+
+    var input = [];
+    for (var i = 0; i < parm.length; i++) {
+        input[i] = document.createElement("input");
+        input[i].setAttribute("type", "hidden");
+        input[i].setAttribute('name', parm[i][0]);
+        input[i].setAttribute("value", parm[i][1]);
+        form.appendChild(input[i]);
+    }
+    document.body.appendChild(form);
+    form.submit();
+}
+
+function getUrlParameter(name) {
+    name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+    var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+    var results = regex.exec(location.search);
+    return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+}
+
+
       // 장바구니 내에서 음료 개수 추가 (Plus 버튼 클릭)
     const addElementButtonClickHandle = (e) => {
         if (e.target !== e.currentTarget) return;
@@ -938,63 +949,53 @@
         addCartButton[i].addEventListener('click', addCartButtonClickHandle);
     }
 
-    //stt 장바구니
-const sttaddCartButtonClickHandle = (menuInfo) => {
-    // 'menuInfo'를 사용하여 함수를 실행합니다.
-    console.log("add " + menuInfo.title);
-
-    // 'menuInfo'의 ID를 사용하여 cartElement를 찾습니다.
-    var cartElement = document.getElementById('cart--' + menuInfo.id);
-
-    if (cartElement === null) {
-        let cartListArea = document.getElementById('cart-list');
-        let newCartItem = document.createElement('div');
-        newCartItem.classList.add('row');
-        newCartItem.id = 'cart--' + menuInfo.id; // 'menuInfo'의 ID를 사용합니다.
-        newCartItem.innerHTML = `<div class="col-7" id="cartElement">${menuInfo.title}</div>
-                                <div class="col-1" id="deduct--${menuInfo.id}"><i class="bi bi-dash-circle" style="pointer-events: none;"></i></div>
-                                <div class="col-2" id="${menuInfo.id}--count">1</div>
-                                <div class="col-1" id="add--${menuInfo.id}"><i class="bi bi-plus-circle" style="pointer-events: none;"></i></div>`;
-        cartListArea.appendChild(newCartItem);
-
-        // Event Listener 추가
-        let addElementButton = document.querySelectorAll('[id^=add--]');
-        for (let i = 0; i < addElementButton.length; i++) {
-            addElementButton[i].addEventListener('click', addElementButtonClickHandle);
-        }
-        let deductElementButton = document.querySelectorAll('[id^=deduct--]');
-        for (let i = 0; i < deductElementButton.length; i++) {
-            deductElementButton[i].addEventListener('click', deductElementButtonClickHandle);
-        }
-    } else {
-        var prev_count = document.getElementById(menuInfo.id + '--count');
-        if (prev_count !== null) {
-            var currentCount = parseInt(prev_count.innerText);
-            if (!isNaN(currentCount)) {
-                prev_count.innerText = currentCount + 1;
-            }
-        }
+    function order_now() {
+    let cart_items = document.querySelectorAll('[id^=cart--]');
+    if (cart_items.length === 0) {
+        alert("장바구니가 비어있습니다.");
+        return;
     }
 
-    // 'cartElement'의 존재 여부를 다시 확인합니다.
-    if (cartElement !== null) {
-        var count = document.querySelector("#headingOne > button > h4 > sup").innerText;
-        count *= 1;
-        document.querySelector("#headingOne > button > h4 > sup").innerText = count + 1;
+    let menu_list = [];
+    let menu_counts = [];
 
-        // 'menuInfo'에서 가격을 가져오기 위해 수정된 부분
-        var price = parseFloat(menuInfo.price);
-        if (!isNaN(price)) {
-            var totalPriceElement = document.getElementById('total-money');
-            var totalPrice = parseFloat(totalPriceElement.innerText);
-            if (!isNaN(totalPrice)) {
-                totalPrice += price;
-                // 텍스트를 업데이트합니다.
-                totalPriceElement.innerHTML = '<h5>' + totalPrice + '</h5>';
-            }
-        }
+    for (let i = 0; i < cart_items.length; i++) {
+        var menu_id = cart_items[i].id.split("--")[1];
+        var cnt = document.getElementById(menu_id + '--count').innerText * 1;
+        console.log(cnt);
+
+        var menu_title = cart_items[i].querySelector('.col-7').innerText; // 메뉴 제목 가져오기
+        menu_list.push(menu_title);
+        menu_counts.push(cnt);
     }
+
+    var usage_type = getUrlParameter('usage_type');
+
+    var form = document.getElementById("order_submission");
+    var parm = [];
+    parm.push(['usage_type', usage_type]);
+    parm.push(['menu_list', menu_list.join(',')]);
+    parm.push(['menu_counts', menu_counts.join(',')]);
+
+    var input = [];
+    for (var i = 0; i < parm.length; i++) {
+        input[i] = document.createElement("input");
+        input[i].setAttribute("type", "hidden");
+        input[i].setAttribute('name', parm[i][0]);
+        input[i].setAttribute("value", parm[i][1]);
+        form.appendChild(input[i]);
+    }
+    document.body.appendChild(form);
+    form.submit();
 }
+
+function getUrlParameter(name) {
+    name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+    var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+    var results = regex.exec(location.search);
+    return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+}
+
 
 
 
@@ -1044,36 +1045,36 @@ function startSpeechRecognition() {
                 } else if (data.stt === '어쩌구') {
                     // '어쩌구'인 경우 Django 뷰 함수 호출
                     $.ajax({
-    url: "{% url 'bugger:get_menu_info_by_name' %}",
-    type: "post",
-    data: {
-        menu_name: '어쩌구',
-        csrfmiddlewaretoken: csrftoken,
-    },
-}).done(function (response) {
-    // Django 뷰 함수의 응답 처리
-    if ('title' in response) {
-        // 메뉴 정보를 얻었을 경우 처리
-        var menuInfo = {
-            title: response.title,
-            price: response.price,
-            image: response.image,
-            desc: response.desc,
-            type: response.type,
-            calorie: response.calorie,
-            id: response.id, // 'menu_id' 대신 'id'를 사용합니다.
-        };
+                    url: "{% url 'bugger:get_menu_info_by_name' %}",
+                    type: "post",
+                    data: {
+                        menu_name: '어쩌구',
+                        csrfmiddlewaretoken: csrftoken,
+                    },
+                }).done(function (response) {
+                    // Django 뷰 함수의 응답 처리
+                    if ('title' in response) {
+                        // 메뉴 정보를 얻었을 경우 처리
+                        var menuInfo = {
+                            title: response.title,
+                            price: response.price,
+                            image: response.image,
+                            desc: response.desc,
+                            type: response.type,
+                            calorie: response.calorie,
+                            id: response.id, // 'menu_id' 대신 'id'를 사용합니다.
+                        };
 
-        console.log("메뉴 정보:", menuInfo);
+                        console.log("메뉴 정보:", menuInfo);
 
-        // DOM 요소에 메뉴 정보를 설정
+                        // DOM 요소에 메뉴 정보를 설정
 
-        sttaddCartButtonClickHandle(menuInfo);
-    } else {
-        // 에러 처리
-        console.error(response.error);
-    }
-});
+                        sttaddCartButtonClickHandle(menuInfo);
+                        } else {
+                            // 에러 처리
+                            console.error(response.error);
+                        }
+                    });
 
                 }
             }

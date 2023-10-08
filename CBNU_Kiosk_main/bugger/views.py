@@ -114,35 +114,47 @@ def young_order(request):
     print("시작 ",context,"context임")
     return render(request, "bugger"
                            "/young_order.html", context)
-    
+
+
+from django.shortcuts import render
+from .models import Menu  # import your Menu model here
+
+
 def old_confirm(request):
     context = {}
     if request.method == "POST":
         usage_type = request.POST.get('usage_type')
-        menu_list = request.POST.getlist('menu_list')[0].split(",")
-        menu_counts = list(map(int, request.POST.getlist('menu_counts')[0].split(",")))
+        menu_list = request.POST.getlist('menu_list')
+        menu_counts = request.POST.getlist('menu_counts')
 
-        print(menu_list)
-        print(menu_counts)
-        
-        order_list = []
-        total_price = 0
-        for menu_title, cnt in zip(menu_list, menu_counts):
-            menu_obj = Menu.objects.filter(title__exact=menu_title)[0]
-            total_price += menu_obj.price * int(cnt)
-            order_list += [{'menu' : menu_obj, 'cnt' : cnt}]
-        
-        context['usage_type'] = usage_type
-        context['total_count'] = sum(menu_counts)
-        context['order_list'] = order_list
-        context['customer_id'] = request.POST.get('customer_id')
-        context['total_price'] = total_price
-                
-        print(context)
+        if menu_list and menu_counts:  # Check if data exists
+            menu_list = menu_list[0].split(",")
+            menu_counts = list(map(int, menu_counts[0].split(",")))
+
+            print(menu_list)
+            print(menu_counts)
+
+            order_list = []  # Initialize order_list as an empty list
+            total_price = 0
+            for menu_title, cnt in zip(menu_list, menu_counts):
+                menu_obj = Menu.objects.filter(title__exact=menu_title).first()  # Use first() instead of [0]
+                if menu_obj:
+                    total_price += menu_obj.price * int(cnt)
+                    order_list.append({'menu': menu_obj, 'cnt': cnt, 'menu_title': menu_title})  # Include 'menu_title'
+
+            context['usage_type'] = usage_type
+            context['total_count'] = sum(menu_counts)
+            context['order_list'] = order_list
+            context['customer_id'] = request.POST.get('customer_id')
+            context['total_price'] = total_price
+
+            print(context)
     else:
         pass
-        
+
     return render(request, 'bugger/old_confirm.html', context)
+
+
 
 def old_pay(request):
     context = {}
