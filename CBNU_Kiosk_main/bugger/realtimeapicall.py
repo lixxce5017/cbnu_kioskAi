@@ -103,14 +103,12 @@ class MicrophoneStream(object):
 # [END audio_stream]
 
 # ... (이전 코드 부분)
-
+timeout_duration = 3
 class RGspeech(Thread):
     def __init__(self):
         Thread.__init__(self)
 
         self.language_code = 'ko-KR'  # BCP-47 언어 태그
-
-        self._buff = queue.Queue()
 
         self.client = speech.SpeechClient()
         self.config = speech.RecognitionConfig(
@@ -124,30 +122,23 @@ class RGspeech(Thread):
 
         self.mic = None
         self.status = True
+        self.transcript = ""  # 음성 인식 결과를 저장할 변수
 
         self.daemon = True
         self.start()
 
-    def __exit__(self):
-        self._buff.put(None)
-
     def run(self):
-        with MicrophoneStream(RATE, CHUNK) as stream:
-            self.mic = stream
-            audio_generator = stream.generator()
-            requests = (speech.StreamingRecognizeRequest(audio_content=content)
-                        for content in audio_generator)
+        try:
+            while True:  # 계속해서 음성 입력을 처리
+                with MicrophoneStream(RATE, CHUNK) as stream:
+                    self.mic = stream
+                    audio_generator = stream.generator()
+                    requests = (speech.StreamingRecognizeRequest(audio_content=content)
+                                for content in audio_generator)
 
-            try:
-                responses = self.client.streaming_recognize(self.streaming_config, requests)
-
-                # Now, put the transcription responses to use.
-                self.listen_print_loop(responses, stream)
-            except Exception as e:
-                print("An error occurred:", str(e))
-            finally:
-                self._buff.put(None)
-                self.status = False
+                    self.listen_print_loop(self.client.streaming_recognize(self.streaming_config, requests))
+        except KeyboardInterrupt:
+            pass  # Ctrl+C를 누르면 종료
 
     def pauseMic(self):
         if self.mic is not None:
@@ -158,11 +149,11 @@ class RGspeech(Thread):
             self.mic.resume()
 
     # 인식된 Text 가져가기
-    def getText(self, block=True):
-        return self._buff.get(block=block)
+    def getText(self):
+        return self.transcript
 
     # 음성인식 처리 루틴
-    def listen_print_loop(self, responses, mic):
+    def listen_print_loop(self, responses):
         num_chars_printed = 0
         try:
             for response in responses:
@@ -181,13 +172,14 @@ class RGspeech(Thread):
                     #### 추가 ### 화면에 인식 되는 동안 표시되는 부분.
                     num_chars_printed = len(transcript)
                 else:
-                    # 큐에 넣는다.
-                    self._buff.put(transcript + overwrite_chars)
+                    # 결과를 바로 출력
+                    print(transcript + overwrite_chars)
                     num_chars_printed = 0
+                    # 결과를 변수에 저장
+                    self.transcript = transcript
         except Exception as e:
             print("An error occurred:", str(e))
 
-# 코드 실행
 if __name__ == '__main__':
     gsp = RGspeech()  # 음성 인식을 수행하는 객체
     stt = gsp.getText()  # 음성 인식 결과를 가져옴

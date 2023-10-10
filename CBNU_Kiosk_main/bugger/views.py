@@ -56,13 +56,23 @@ def home(request):
 
 
 def old_order(request):
+    age = request.GET.get('age')
+    print(age)
+
+    qs = Order.objects.select_related('customer')
+    sub_qs = qs.filter(customer__age_group=f"{age}")
+    sub_menu_ids = list(sub_qs.values('menu_id').annotate(total=Count('menu_id')).order_by("count")[:5])
+    sub_menu_ids = list(map(lambda x: x['menu_id'], sub_menu_ids))
+    best_menu_all = Menu.objects.filter(id__in=sub_menu_ids)
+    print(best_menu_all)
+
     context = {'bugger_all': Menu.objects.filter(type__icontains="bugger"),
                'Whopper_all': Menu.objects.filter(type__icontains="Whopper"),
                'Premium_all': Menu.objects.filter(type__icontains="Premium"),
                'side_all': Menu.objects.filter(type__icontains="side"),
                'drink_all': Menu.objects.filter(type__icontains="drink"),
                'set_change_all': Menu.objects.filter(type__icontains="set_change"),
-
+                'best_menu_all' : best_menu_all,
                }
 
     page_url = "bugger/old_order.html"
@@ -313,9 +323,15 @@ from django.views.decorators.csrf import csrf_exempt
 
 
 
+
+from django.http import JsonResponse
 @csrf_exempt
 def apic(request):
     gsp = RGspeech()  # 음성 인식을 수행하는 객체
+
+    while gsp.status:  # 음성 인식이 계속되는 동안 반복
+        pass  # 여기에서 아무 작업도 하지 않고 계속 기다림
+
     stt = gsp.getText()  # 음성 인식 결과를 가져옴
     is_listening = gsp.status  # 음성 인식 상태
 

@@ -1,6 +1,7 @@
 
 from django.urls import path, include
 from . import views
+from django.contrib import admin
 app_name ='bugger'
 urlpatterns = [
     path('', views.home, name='home'),
@@ -15,7 +16,7 @@ urlpatterns = [
     path('apic', views.apic, name='apic'),
     path('get_menu_id_by_name', views.get_menu_id_by_name, name='get_menu_id_by_name'),
     path('get_menu_info_by_name', views.get_menu_info_by_name, name='get_menu_info_by_name'),
-
+    path('change_list/', views.change_list, name='change_list'),
 ]
 
 

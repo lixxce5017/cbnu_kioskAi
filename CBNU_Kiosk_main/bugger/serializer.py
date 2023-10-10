@@ -8,7 +8,6 @@ class CustomerSerializer(serializers.ModelSerializer):
 
 
 from .models import Menu
-
 class MenuSerializer(serializers.ModelSerializer):
     class Meta:
         model = Menu
