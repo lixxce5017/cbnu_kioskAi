@@ -1074,10 +1074,10 @@ const sttaddCartButtonClickHandle = (menuInfo) => {
 var isListening = false;
 var currentMenu = 'Whopper';
 
+
 function startSpeechRecognition() {
     if (!isListening) {
         isListening = true;
-
         $.ajax({
             url: "{% url 'bugger:apic' %}",
             type: "post",
@@ -1095,9 +1095,9 @@ function startSpeechRecognition() {
                 } else if (data.stt === '음료') {
                     showMenu('drink');
                 }
-                 else if (data.stt === '주문') {
+                else if (data.stt === '주문') {
                     order_now();
-                }else if (data.stt === '와퍼') {
+                } else if (data.stt === '와퍼') {
                     showMenu('Whopper');
                 } else if (data.stt === '어쩌구') {
                     // '어쩌구'인 경우 Django 뷰 함수 호출
@@ -1129,16 +1129,14 @@ function startSpeechRecognition() {
                         } else {
                             // 에러 처리
                             console.error(response.error);
+                             startSpeechRecognition();
                         }
                     });
-                } else {
-                    // 다른 단어가 입력되었을 때 다시 음성 인식을 시작
-                    isListening = false;
-                    startSpeechRecognition();
                 }
             }
-            isListening = false;
-            startSpeechRecognition();
+        }).always(function () {
+            isListening = false; // 요청이 완료되면 다시 음성 인식 준비
+            startSpeechRecognition(); // 다음 음성 인식 요청 시작
         });
     }
 }
@@ -1146,6 +1144,7 @@ function startSpeechRecognition() {
 $(document).ready(function () {
     startSpeechRecognition();
 });
+
 
 function showMenu(menuId) {
     var allMenus = ['bugger', 'Premium', 'side', 'drink', 'Whopper'];

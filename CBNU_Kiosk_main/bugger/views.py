@@ -325,13 +325,15 @@ from django.views.decorators.csrf import csrf_exempt
 
 
 from django.http import JsonResponse
+
+
+
+
+# 전역으로 음성 인식 객체를 초기화
+gsp = None
 @csrf_exempt
 def apic(request):
     gsp = RGspeech()  # 음성 인식을 수행하는 객체
-
-    while gsp.status:  # 음성 인식이 계속되는 동안 반복
-        pass  # 여기에서 아무 작업도 하지 않고 계속 기다림
-
     stt = gsp.getText()  # 음성 인식 결과를 가져옴
     is_listening = gsp.status  # 음성 인식 상태
 
@@ -343,8 +345,6 @@ def apic(request):
         return JsonResponse({'stt': stt, 'is_listening': is_listening})
     else:
         return JsonResponse({'stt': '', 'is_listening': is_listening})
-
-
 
 @csrf_exempt
 def get_menu_id_by_name(request):
