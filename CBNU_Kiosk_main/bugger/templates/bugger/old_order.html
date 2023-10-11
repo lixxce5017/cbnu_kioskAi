@@ -132,7 +132,7 @@
 <div id="stt"></div>
         <div class="row justify-content-center" id="menu_content--Whopper" style="display: on;">
         {% for menu in Whopper_all %}
-            <div class="col-md-4 col-4">
+            <div class="col-md-5 col-5">
                 <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal{{menu.id}}">
                     <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                         <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
@@ -202,7 +202,7 @@
                                 <div class="modal-body">
                                     <div class="row">
                                         {% for subMenu in set_change_all %}
-                                            <div class="col-md-2 col-2">
+                                            <div class="col-md-5 col-5">
                                                 <div class="portfolio-item mx-auto">
                                                     <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                                                         <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
@@ -246,7 +246,7 @@
      <!-- 버거탭--->
           <div class="row justify-content-center" id="menu_content--bugger" style="display: none;">
         {% for menu in bugger_all %}
-            <div class="col-md-2 col-2">
+            <div class="col-md-5 col-5">
                 <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal{{menu.id}}">
                     <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                         <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
@@ -316,7 +316,7 @@
                                 <div class="modal-body">
                                     <div class="row">
                                         {% for subMenu in set_change_all %}
-                                            <div class="col-md-2 col-2">
+                                            <div class="col-md-5 col-5">
                                                 <div class="portfolio-item mx-auto">
                                                     <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                                                         <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
@@ -360,7 +360,7 @@
      <!-- 프리미엄--->
       <div class="row justify-content-center" id="menu_content--Premium" style="display: none;">
         {% for menu in Premium_all %}
-            <div class="col-md-2 col-2">
+            <div class="col-md-5 col-5">
                 <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal{{menu.id}}">
                     <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                         <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
@@ -430,7 +430,7 @@
                                 <div class="modal-body">
                                     <div class="row">
                                         {% for subMenu in set_change_all %}
-                                            <div class="col-md-2 col-2">
+                                            <div class="col-md-5 col-5">
                                                 <div class="portfolio-item mx-auto">
                                                     <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                                                         <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
@@ -474,7 +474,7 @@
      <!-- 사이드 탭--->
       <div class="row justify-content-center" id="menu_content--side" style="display: none;">
         {% for menu in side_all %}
-            <div class="col-md-2 col-2">
+            <div class="col-md-5 col-5">
                 <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal{{menu.id}}">
                     <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                         <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
@@ -529,7 +529,7 @@
     <!-- 드링크 탭--->
       <div class="row justify-content-center" id="menu_content--drink" style="display: none;">
         {% for menu in drink_all %}
-            <div class="col-md-2 col-2">
+             <div class="col-md-5 col-5">
                 <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal{{menu.id}}">
                     <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                         <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
@@ -1055,9 +1055,7 @@ const sttaddCartButtonClickHandle = (menuInfo) => {
 }
 
 
-
-
-    var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+ var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
 
     function csrfSafeMethod(method) {
         return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
@@ -1071,9 +1069,9 @@ const sttaddCartButtonClickHandle = (menuInfo) => {
         }
     });
 
-var isListening = false;
-var currentMenu = 'Whopper';
 
+var currentMenu = 'Whopper';
+var isListening = false; // isListening 변수를 초기화
 
 function startSpeechRecognition() {
     if (!isListening) {
@@ -1084,66 +1082,106 @@ function startSpeechRecognition() {
         }).done(function (data) {
             if (data.stt !== '') {
                 document.getElementById('stt').innerHTML = data.stt;
-                if (data.stt === '홈으로') {
-                    location.href = '{% url 'bugger:home' %}';
-                } else if (data.stt === '버거') {
-                    showMenu('bugger');
-                } else if (data.stt === '프리미엄') {
-                    showMenu('Premium');
-                } else if (data.stt === '사이드') {
-                    showMenu('side');
-                } else if (data.stt === '음료') {
-                    showMenu('drink');
-                }
-                else if (data.stt === '주문') {
-                    order_now();
-                } else if (data.stt === '와퍼') {
-                    showMenu('Whopper');
-                } else if (data.stt === '어쩌구') {
-                    // '어쩌구'인 경우 Django 뷰 함수 호출
-                    $.ajax({
-                        url: "{% url 'bugger:get_menu_info_by_name' %}",
-                        type: "post",
-                        data: {
-                            menu_name: '어쩌구',
-                            csrfmiddlewaretoken: csrftoken,
-                        },
-                    }).done(function (response) {
-                        // Django 뷰 함수의 응답 처리
-                        if ('title' in response) {
-                            // 메뉴 정보를 얻었을 경우 처리
-                            var menuInfo = {
-                                title: response.title,
-                                price: response.price,
-                                image: response.image,
-                                desc: response.desc,
-                                type: response.type,
-                                calorie: response.calorie,
-                                id: response.id, // 'menu_id' 대신 'id'를 사용합니다.
-                            };
-
-                            console.log("메뉴 정보:", menuInfo);
-
-                            // DOM 요소에 메뉴 정보를 설정
-                            sttaddCartButtonClickHandle(menuInfo);
-                        } else {
-                            // 에러 처리
-                            console.error(response.error);
-                             startSpeechRecognition();
-                        }
-                    });
-                }
+                handleSpeechRecognitionResult(data.stt);
             }
         }).always(function () {
-            isListening = false; // 요청이 완료되면 다시 음성 인식 준비
-            startSpeechRecognition(); // 다음 음성 인식 요청 시작
+            isListening = false;
+            startSpeechRecognition();
         });
     }
 }
 
+function handleSpeechRecognitionResult(result) {
+    switch (result) {
+        case '홈으로':
+            location.href = '{% url 'bugger:home' %}';
+            break;
+        case '버거':
+            showMenu('bugger');
+            break;
+        case '프리미엄':
+            showMenu('Premium');
+            break;
+        case '사이드':
+            showMenu('side');
+            break;
+        case '음료':
+            showMenu('drink');
+            break;
+        case '주문':
+            order_now();
+            break;
+        case '와퍼':
+            showMenu('Whopper');
+            break;
+        case '실험 버거 12':
+            getMenuInfoByName('실험버거12');
+            break;
+        case '실험 보고서 12':
+            getMenuInfoByName('실험버거12');
+            break;
+        case '실험복 52':
+            getMenuInfoByName('실험버거12');
+            break;
+        case '실험 버거 3':
+            getMenuInfoByName('실험버거3');
+            break;
+        case '실험 보고서 3':
+            getMenuInfoByName('실험버거12');
+            break;
+        case '실험 보고서 4':
+            getMenuInfoByName('실험버거12');
+            break;
+        case '실험 보고서':
+            getMenuInfoByName('실험버거4');
+            break;
+        case '실험 버거 4':
+            getMenuInfoByName('실험버거4');
+            break;
+        default:
+            // 에러 처리 또는 다른 처리 방법 추가
+            break;
+    }
+}
+
+function getMenuInfoByName(menuName) {
+    $.ajax({
+        url: "{% url 'bugger:get_menu_info_by_name' %}",
+        type: "post",
+        data: {
+            menu_name: menuName,
+            csrfmiddlewaretoken: csrftoken,
+        },
+    }).done(function (response) {
+        if ('title' in response) {
+            var menuInfo = {
+                title: response.title,
+                price: response.price,
+                image: response.image,
+                desc: response.desc,
+                type: response.type,
+                calorie: response.calorie,
+                id: response.id,
+            };
+            console.log("메뉴 정보:", menuInfo);
+            sttaddCartButtonClickHandle(menuInfo);
+        } else {
+            console.error(response.error);
+            startSpeechRecognition();
+        }
+    });
+}
+
+// 다른 함수들 (showMenu, order_now, sttaddCartButtonClickHandle 등)에 대한 정의가 필요합니다.
+
+
+
 $(document).ready(function () {
     startSpeechRecognition();
 });
+
+
+
 
 
 function showMenu(menuId) {
