@@ -2,8 +2,6 @@ from django.contrib import admin
 from django.conf import settings
 from django.db.models import Count
 from .models import *
-from django.urls import reverse
-from django.utils.html import format_html
 
 
 class MenuAdmin(admin.ModelAdmin):
@@ -58,6 +56,7 @@ class OrderAdmin(admin.ModelAdmin):
             sub_ctx = []
             for x in sub_menu_ids:
                 print(x)
+                print("ddd")
                 menu = Menu.objects.get(id__exact=x['menu_id']).title
                 sub_ctx += [{'label': menu, 'value': x['total']}]
 
