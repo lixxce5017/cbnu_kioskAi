@@ -111,22 +111,19 @@
         <ul class="tab_title topbar" style="text-align:center;">
 
             <li id="menu_type--best_menu">
-                <h3 class="masthead-heading text-center text-uppercase text-white mb-0" style="pointer-events: none; ">best_menu</h3>
+                <h3 class="masthead-heading text-center text-uppercase text-white mb-0" style="pointer-events: none; ">추천메뉴</h3>
             </li>
-            <li class="on" id="menu_type--Whopper">
-                <h3 class="masthead-heading text-center text-uppercase text-white mb-0" style="pointer-events: none; ">Whopper</h3>
+            <li class="on" id="menu_type--old_W">
+                <h3 class="masthead-heading text-center text-uppercase text-white mb-0" style="pointer-events: none; ">와퍼</h3>
             </li>
-            <li id="menu_type--bugger">
-                <h3 class="masthead-heading text-center text-uppercase text-white mb-0" style="pointer-events: none; ">bugger</h3>
+            <li id="menu_type--old_B">
+                <h3 class="masthead-heading text-center text-uppercase text-white mb-0" style="pointer-events: none; ">일반버거</h3>
             </li>
-            <li id="menu_type--Premium">
-                <h3 class="masthead-heading text-center text-uppercase text-white mb-0" style="pointer-events: none; ">Premium</h3>
+            <li id="menu_type--old_P">
+                <h3 class="masthead-heading text-center text-uppercase text-white mb-0" style="pointer-events: none; ">고급버거</h3>
             </li>
             <li id="menu_type--side">
-                <h3 class="masthead-heading text-center text-uppercase text-white mb-0" style="pointer-events: none; ">side</h3>
-            </li>
-            <li id="menu_type--drink">
-                <h3 class="masthead-heading text-center text-uppercase text-white mb-0" style="pointer-events: none; ">drink</h3>
+                <h3 class="masthead-heading text-center text-uppercase text-white mb-0" style="pointer-events: none; ">기타</h3>
             </li>
         </ul>
 </nav>
@@ -247,8 +244,8 @@
         {% endfor %}
     </div>
 
-        <div class="row justify-content-center" id="menu_content--Whopper" style="display: on;">
-        {% for menu in Whopper_all %}
+        <div class="row justify-content-center" id="menu_content--old_W" style="display: on;">
+        {% for menu in old_W_all %}
             <div class="col-md-5 col-5">
                 <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal{{menu.id}}">
                     <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
@@ -361,8 +358,8 @@
         {% endfor %}
     </div>
      <!-- 버거탭--->
-          <div class="row justify-content-center" id="menu_content--bugger" style="display: none;">
-        {% for menu in bugger_all %}
+          <div class="row justify-content-center" id="menu_content--old_B" style="display: none;">
+        {% for menu in old_B_all %}
             <div class="col-md-5 col-5">
                 <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal{{menu.id}}">
                     <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
@@ -475,8 +472,8 @@
         {% endfor %}
     </div>
      <!-- 프리미엄--->
-      <div class="row justify-content-center" id="menu_content--Premium" style="display: none;">
-        {% for menu in Premium_all %}
+      <div class="row justify-content-center" id="menu_content--old_P" style="display: none;">
+        {% for menu in old_P_all %}
             <div class="col-md-5 col-5">
                 <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal{{menu.id}}">
                     <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
@@ -644,62 +641,6 @@
         {% endfor %}
     </div>
     <!-- 드링크 탭--->
-      <div class="row justify-content-center" id="menu_content--drink" style="display: none;">
-        {% for menu in drink_all %}
-             <div class="col-md-5 col-5">
-                <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal{{menu.id}}">
-                    <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
-                        <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
-                    </div>
-                    <!-- Product image-->
-                    <img class="card-img-top" id="{{menu.title}}--image" src="{{menu.image|fix_route|default:'https://dummyimage.com/450x300/dee2e6/6c757d.jpg'}}" alt="..." />
-                    <!-- Product details-->
-                    <div class="card-body p-4">
-                        <div class="text-center">
-                            <!-- Menu name-->
-                            <h3 class="fw-bolder">{{menu.title|fix_title|linebreaks}}</h3>
-                            <!-- Menu price-->
-                            <h4 class="fw-normal" id="{{menu.title}}--price">{{menu.price}} 원</h4>
-                            <!-- Menu Calorie-->
-                            <h5 class="fw-light text-muted">{{menu.calorie}} Kcal</h5>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="portfolio-modal modal fade" id="portfolioModal{{menu.id}}" tabindex="2" aria-labelledby="portfolioModal{{menu.id}}" aria-hidden="true">
-                <div class="modal-dialog modal-xl">
-                    <div class="modal-content">
-                        <div class="modal-header border-0">
-                            <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body text-center pb-5">
-                            <div class="container">
-                                <div class="row justify-content-center">
-                                    <div class="col-lg-8">
-                                        <!-- Portfolio Modal - Image-->
-                                        <img class="img-fluid rounded mb-5" src="{{menu.image|fix_route|default:'https://dummyimage.com/450x300/dee2e6/6c757d.jpg'}}" alt="..." />
-                                        <div style="text-align: left;">
-                                            <!-- Portfolio Modal - Title-->
-                                            <h1 class="menu-modal-title text-secondary text-uppercase">{{menu.title}}</h1>
-                                            <h1 class="menu-modal-en-title text-secondary text-uppercase">{{menu.en_title|default:'치킨&새우'}}</h1><br>
-                                            <!-- Portfolio Modal - Text-->
-                                            <p class="mb-4 menu-modal-desc">{{menu.desc}}</p>
-                                        </div>
-                                        <button class="btn btn-in-modal btn-primary" data-bs-dismiss="modal" id="addToCart--{{menu.title}}">
-                                            <i class="fas fa-xmark fa-fw"></i>
-                                            장바구니 담기
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        {% endfor %}
-    </div>
-</div>
-
 
 
 
@@ -1316,7 +1257,29 @@ function showMenu(menuId) {
     }
 }
 
+function convertTextToSpeechOnLoad() {
+            const keyword = "안녕하세요";  // 미리 정의된 한글 예약어
 
+            fetch(`/custom_text_to_speech/?keyword=${keyword}`)
+                .then(response => response.json())
+                .then(data => {
+                    const audio = document.getElementById('audio');
+                    const audioBlob = new Blob([base64ToArrayBuffer(data.audio)], { type: 'audio/wav' });
+                    const audioUrl = URL.createObjectURL(audioBlob);
+                    audio.src = audioUrl;
+                    audio.play();
+                });
+        }
+
+        function base64ToArrayBuffer(base64) {
+            const binaryString = window.atob(base64);
+            const length = binaryString.length;
+            const bytes = new Uint8Array(length);
+            for (let i = 0; i < length; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
+            }
+            return bytes;
+        }
 
 
 </script>

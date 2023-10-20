@@ -56,7 +56,6 @@ class OrderAdmin(admin.ModelAdmin):
             sub_ctx = []
             for x in sub_menu_ids:
                 print(x)
-                print("ddd")
                 menu = Menu.objects.get(id__exact=x['menu_id']).title
                 sub_ctx += [{'label': menu, 'value': x['total']}]
 

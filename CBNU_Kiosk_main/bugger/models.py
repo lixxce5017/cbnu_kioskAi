@@ -19,6 +19,9 @@ class Menu(models.Model):
                     ('side', 'side'),
                   ('Whopper', 'Whopper'),
                   ('set_change','set_change'),
+                  ('old_B','old_B'),
+                  ('old_P', 'old_P'),
+                  ('old_W', 'old_W'),
                     )
     class Meta:
         ordering = ['-id']
@@ -63,6 +66,7 @@ class Order(models.Model):
         on_delete=models.CASCADE,
         null=True
     )    
-    created = models.DateField(auto_now_add=True) 
+    created = models.DateField(auto_now_add=True)
+
 
 

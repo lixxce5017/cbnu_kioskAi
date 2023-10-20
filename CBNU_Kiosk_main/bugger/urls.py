@@ -12,7 +12,6 @@ urlpatterns = [
     path('img_post', views.get_post),
     path('camera', views.camera, name='camera'),
     path('check', views.check, name='check'),
-    path('text_to_speech', views.text_to_speech, name='text_to_speech'),
     path('apic', views.apic, name='apic'),
     path('get_menu_id_by_name', views.get_menu_id_by_name, name='get_menu_id_by_name'),
     path('get_menu_info_by_name', views.get_menu_info_by_name, name='get_menu_info_by_name'),
