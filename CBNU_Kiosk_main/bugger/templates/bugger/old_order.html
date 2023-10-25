@@ -46,37 +46,36 @@
 
 
 <style>
-    .tab_title li {
+    .tab_title li { /*인두 : 영오더와 같이 주문 스타일 변경*/
         list-style: none;
-        color: #fff;
-        background-color: #399B83;
-        border-color: #399B83;
+        color: #000;
+        background-color: #F2EBDE;
+
         cursor: pointer;
         padding: 15px 35px;
         display: inline-block;
         margin: 0 0 1rem;
-        border-radius: 0.5rem;
 
 
-      }
-      .tab_title li:hover {
-        color: #fff;
-        background-color: #4AC4A5;
+
+      }.tab_title li:hover { /*인두 : 영오더와 같이 주문 스타일 변경*/
+        color: #ff0000;
+
         border-color: #15967d;
 
       }
-    .tab_title li.on {
-        color: #fff;
-        background-color: #4AC4A5;
+    .tab_title li.on { /*인두 : 영오더와 같이 주문 스타일 변경*/
+        color: #ff0000;
+
         font-weight: bold;
         border-color: #15967d;
-        box-shadow: 0 0 0 0.25rem rgba(60, 198, 171, 0.5);
+        box-shadow: 0 0.7rem 0 0 rgba(255, 0, 0);
 
       }
 
-      .tab_title li:disabled, .tab_title li.disabled {
+      .tab_title li:disabled, .tab_title li.disabled { /*인두 : 영오더와 같이 주문 스타일 변경*/
         list-style: none;
-        color: #fff;
+        color: #ff0000;
         background-color: #1abc9c;
         border-color: #1abc9c;
       }
@@ -100,6 +99,8 @@
 </style>
 
 
+
+
 <!--맨 위에 메뉴 바 --->
 
 
@@ -108,22 +109,22 @@
 
     <nav class="navbar-expand-lg order-py-5">
         <!-- Portfolio Grid Items-->
-        <ul class="tab_title topbar" style="text-align:center;">
+        <ul class="tab_title topbar" style="text-align:center;background-color: #F2EBDE;">
 
             <li id="menu_type--best_menu">
-                <h3 class="masthead-heading text-center text-uppercase text-white mb-0" style="pointer-events: none; ">추천메뉴</h3>
+                <h2 class="masthead-heading text-center text-uppercase text-black mb-0" style="pointer-events: none; ">추천메뉴</h2>
             </li>
             <li class="on" id="menu_type--old_W">
-                <h3 class="masthead-heading text-center text-uppercase text-white mb-0" style="pointer-events: none; ">와퍼</h3>
+                <h2 class="masthead-heading text-center text-uppercase text-black mb-0" style="pointer-events: none; ">와퍼</h2>
             </li>
             <li id="menu_type--old_B">
-                <h3 class="masthead-heading text-center text-uppercase text-white mb-0" style="pointer-events: none; ">일반버거</h3>
+                <h2 class="masthead-heading text-center text-uppercase text-black mb-0" style="pointer-events: none; ">일반버거</h2>
             </li>
             <li id="menu_type--old_P">
-                <h3 class="masthead-heading text-center text-uppercase text-white mb-0" style="pointer-events: none; ">고급버거</h3>
+                <h2 class="masthead-heading text-center text-uppercase text-black mb-0" style="pointer-events: none; ">고급버거</h2>
             </li>
             <li id="menu_type--side">
-                <h3 class="masthead-heading text-center text-uppercase text-white mb-0" style="pointer-events: none; ">기타</h3>
+                <h2 class="masthead-heading text-center text-uppercase text-black mb-0" style="pointer-events: none; ">기타</h2>
             </li>
         </ul>
 </nav>
@@ -694,9 +695,10 @@
         padding-bottom: 0rem;
       }
     .cart-info {
-        border-radius: 35px 35px 0px 0px;
+
         width: 100%;
         padding: 1rem 1rem;
+        background-color : #EF8C47;
     }
     .payment {
         width: 100%;
@@ -708,7 +710,7 @@
 -    }
     #pay-cancel {
         color: #fff;
-        background-color: #BEBEBE;
+        background-color: #4B2618;
     }
     #pay {
         background-color: #FF0000;
@@ -736,16 +738,16 @@
 
 </style>
 <!-- 밑에 결제하는 부분 Section-->
-<section class="bottombar">
+<section class="bottombar" style="background-color: #F2EBDE;">
     <form id="order_submission" action="{% url 'bugger:old_confirm' %}" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
     </form>
     <!-- 주문한 상품--->
-    <div class="cart-info py-3 bg-secondary">
+    <div class="cart-info py-3">
         <div class="row" id="cart">
             <div class="row" id="headingOne">
                 <button class="btn collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                    <h4 class="text-white fw-bolder">주문한 상품 <sup>0</sup></h4>
+                    <h1 class="fw-bolder">🛒 주문한 상품들 보기<sup>0</sup></h1>
                 </button>
             </div>
             <div class="row accordion-collapse collapse" id="collapseOne" aria-labelledby="headingOne" data-bs-parent="#cart">
@@ -762,15 +764,14 @@
         <div class="row">
 
             <div id="pay-cancel" class="py-3" OnClick="location.href ='{% url 'bugger:home' %}'" style="cursor:pointer;" >
-                <h5 class="fw-bolder">취소하기</h5>
+                <h1 class="fw-bolder">❌ 모든 주문 취소하기</h1></h1>
             </div>
 
             <div id="pay" class="py-3" OnClick="order_now();" style="cursor:pointer;">
                 <div class="row">
-                    <div class="col-5 text-white" style="text-align: left; padding-left: 10%;"><h10>결제하기</h10></div>
-                    <div class="col-1 text-white" style="text-align: left;">￦</div>
-                    <div class="col-3 text-white" id="total-money" style="text-align: right; padding-right: 10%;"><h5>0</h5></div>
-                    <div class="col-3 text-white"><h6><i class="bi bi-chevron-right" style="text-align:left;"></i></h6></div>
+                     <div class="col-5 text-white" style="text-align: center; padding-left: 10%;"><h1>>💳결제하기</h1></div>
+                    <div class="col-3 text-white" id="total-money" style="text-center: right; padding-right: 10%;"><h1>0</h1></div>
+                    <div class="col-1 text-white" style="text-align: center;"><h1>원</h1></div>
                 </div>
             </div>
         </div>

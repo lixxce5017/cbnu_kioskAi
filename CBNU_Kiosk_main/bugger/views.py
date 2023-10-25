@@ -68,9 +68,9 @@ def old_order(request):
     best_menu_all = Menu.objects.filter(id__in=sub_menu_ids)
     print(best_menu_all)
 
-    context = {'old_B': Menu.objects.filter(type__icontains="old_B"),
-               'old_W': Menu.objects.filter(type__icontains="old_W"),
-               'old_P': Menu.objects.filter(type__icontains="old_P"),
+    context = {'old_B_all': Menu.objects.filter(type__icontains="old_B"),
+               'old_W_all': Menu.objects.filter(type__icontains="old_W"),
+               'old_P_all': Menu.objects.filter(type__icontains="old_P"),
                'side_all': Menu.objects.filter(type__icontains="side"),
                'set_change_all': Menu.objects.filter(type__icontains="set_change"),
                'best_menu_all': best_menu_all,

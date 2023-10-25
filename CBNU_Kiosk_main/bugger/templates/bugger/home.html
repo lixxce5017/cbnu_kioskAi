@@ -17,8 +17,8 @@
     }
 
     h1 {
-        color : red;
-        font-size : 32px;
+
+        font-size : 55px;
     }
 
     div {
@@ -27,13 +27,11 @@
 
     .box1 {
         box-sizing: content-box;
-        width: 150px;
-        height: 100px;
-        margin-left: 0.5rem;
-        margin-right: 0.5rem;
-        padding: 1rem 5rem 0.4rem 5rem;
-        border-radius: 2rem;
-        border: 2px solid #DB4834;
+        width: 380px;
+        height: 150px;
+        padding: 1rem 5rem 1rem 5rem;
+
+        border: 2px solid;
         font-family: 'yg-jalnan';
     }
 
@@ -92,25 +90,25 @@
 <link href="/static/css/basic.css" rel="stylesheet" />
 
 <header class="py-0">
-        <div class="text-light-muted">
-            <img width="820" height="880" src="/static/assets/new_da.JPG" alt="logo" style="border-radius: 0%;"/>
+        <div class="text-light-muted" style="padding-top: 10%; padding-bottom: 10%;">
+            <img width="1080" height="1600" src="/static/assets/new_banner.JPG" alt="logo" style="border-radius: 0%;"/>
         </div>
     </div>
 </header>
 
 <body class="background py-0" >
 
-    <div class="container px-4 px-lg-5">
+    <div class="container px-5 px-lg-5">
         <div class="row gx-4 gx-lg-5 justify-content-center" id="box">
-            <div class="col-lg-6 box1" style="background-color:#FFFFFF;" OnClick="location.href ='{% url 'bugger:camera' %}?usage_type=restaurant'" >
-                <div class="text-center my-4">
-                    <h1 class="fw-bolder">매장 식사</h1>
+            <div class="col-6 box1" style="background-color:#EF8C47;" OnClick="location.href ='{% url 'bugger:camera' %}?usage_type=restaurant'" >
+                <div class="text-center my-5">
+                    <h1 class="fw-bolder">🍽 매장식사</h1>
                 </div>
             </div>
 
-            <div class="col-lg-6 box1" style="background-color:#FFFFFF;" OnClick="location.href ='{% url 'bugger:camera' %}?usage_type=takeout'" >
-                <div class="text-center my-4">
-                    <h1 class="fw-bolder">방문 포장</h1>
+            <div class="col-6 box1" style="background-color:#C63720;" OnClick="location.href ='{% url 'bugger:camera' %}?usage_type=takeout'" >
+                <div class="text-center my-5">
+                    <h1 class="fw-bolder" style="color: white;">👝 포장하기</h1>
                 </div>
             </div>
         </div>

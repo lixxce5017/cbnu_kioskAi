@@ -107,7 +107,7 @@
         padding: 15px 35px;
         display: inline-block;
         margin: 0 0 1rem;
-        border-radius: 0.5rem;
+       ㅇㅁㄴㅇ
 
 
       }
@@ -809,7 +809,7 @@
         padding-bottom: 0rem;
       }
     .cart-info {
-
+        background-color: #EF8C47;
         width: 100%;
         padding: 1rem 1rem;
     }
@@ -823,18 +823,18 @@
     }
     #pay-cancel {
         color: #000;
-        background-color: #e4e4e4fb;
+        background-color: #ff0000;
     }
     #pay {
-        background-color: #e4e4e4fb;
+       background-color: #4B2618;
     }
     #pay-cancel:hover {
         color: #000;
-        background-color: #e4e4e4fb;
+        background-color: #ff0000;
     }
     #pay:hover {
         color: #000;
-        background-color: #e4e4e4fb;
+        background-color: #4B2618;
     }
     #cart-list > * {
         color: #000;
@@ -857,11 +857,11 @@
         {% csrf_token %}
     </form>
     <!-- 주문한 상품--->
-    <div class="cart-info py-3" style="background-color: #e4e4e4fb">
+    <div class="cart-info py-3" style="background-color: #EF8C47">
         <div class="row" id="cart">
             <div class="row" id="headingOne">
                 <button class="btn collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                    <h4 class="text-black fw-bolder">주문한 상품 <sup>0</sup></h4>
+                    <h4 class="text-black fw-bolder">🛒주문한 상품 <sup>0</sup></h4>
                 </button>
             </div>
             <div class="row accordion-collapse collapse" id="collapseOne" aria-labelledby="headingOne" data-bs-parent="#cart">
@@ -878,19 +878,18 @@
         <div class="row">
 
             <div id="pay-cancel" class="py-3" OnClick="location.href ='{% url 'bugger:home' %}'" style="cursor:pointer;" >
-                <h4 class="fw-bolder">취소하기</h4>
+               <h2 class="fw-bolder" style="color: white;"> 🚫 주문 취소</h2>
             </div>
-
             <div id="pay" class="py-3" OnClick="order_now();" style="cursor:pointer;">
                 <div class="row">
-                    <div class="col-5 text-black" style="text-align: left; padding-left: 10%;"><h4>결제하기</h4></div>
-                    <div class="col-1 text-black" style="text-align: left;"><h5>￦</h5></div>
-                    <div class="col-3 text-black" id="total-money" style="text-align: right; padding-right: 10%;"><h5>0</h5></div>
-                    <div class="col-3 text-black"><h6><i class="bi bi-chevron-right" style="text-align:left;"></i></h6></div>
-                </div>
-            </div>
+                    <div class="col-5 text-white" style="text-align: left; padding-left: 10%;"><h2>💳 결제하기</h2></div>
+                    <div class="col-1 text-white" style="text-align: left;"><h2>￦</h2></div>
+                    <div class="col-3 text-white" id="total-money" style="text-align: right; padding-right: 10%;"><h2>0</h2></div>
+                    <div class="col-3 text-black"><h2><i class="bi bi-chevron-right" style="text-align:left;"></i></h2></div>
+
         </div>
     </div>
+            </div>
 
 
 </section>
