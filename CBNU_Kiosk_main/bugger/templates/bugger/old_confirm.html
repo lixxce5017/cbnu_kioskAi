@@ -78,7 +78,7 @@ function startSpeechRecognition() {
                 else if(data.stt=='뒤로'){
                 location.href = '{% url 'bugger:old_order' %}';
                 }
-                 else if(data.stt=='카드결제'){
+                 else if(data.stt=='카드 결제'){
                      var modal = new bootstrap.Modal(document.getElementById('portfolioModal_coupon'));
                         modal.show();
 
@@ -87,7 +87,7 @@ function startSpeechRecognition() {
                             modal.hide();
                         });
                 }
-                else if(data.stt=='간편결제'){
+                else if(data.stt=='간편 결제'){
 
                 }
                   else {
@@ -293,5 +293,10 @@ $(document).ready(function () {
         </div>
     </div>
 </div>
-
+<script>
+         var audio = new Audio("/static/audio/결제.wav"); // 음성 파일 경로
+        audio.load();
+        audio.volume = 1;
+        audio.play();
+</script>
 {% endblock content %}

@@ -747,7 +747,7 @@
         <div class="row" id="cart">
             <div class="row" id="headingOne">
                 <button class="btn collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                    <h1 class="fw-bolder">🛒 주문한 상품들 보기<sup>0</sup></h1>
+                    <h4 class="text-black fw-bolder">🛒주문한 상품 <sup>0</sup></h4>
                 </button>
             </div>
             <div class="row accordion-collapse collapse" id="collapseOne" aria-labelledby="headingOne" data-bs-parent="#cart">
@@ -1132,6 +1132,10 @@ const sttaddCartButtonClickHandle = (menuInfo) => {
 var currentMenu = 'Whopper';
 var isListening = false; // isListening 변수를 초기화
 
+var audio = new Audio("/static/audio/주문.wav"); // 음성 파일 경로
+        audio.load();
+        audio.volume = 1;
+        audio.play();
 function startSpeechRecognition() {
     if (!isListening) {
         isListening = true;
@@ -1173,8 +1177,8 @@ function handleSpeechRecognitionResult(result) {
         case '와퍼':
             showMenu('Whopper');
             break;
-        case '실험 버거 12':
-            getMenuInfoByName('실험버거12');
+        case '실시':
+            getMenuInfoByName('qweqwe');
             break;
         case '실험 보고서 12':
             getMenuInfoByName('실험버거12');

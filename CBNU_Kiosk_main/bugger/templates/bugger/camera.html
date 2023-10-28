@@ -79,7 +79,12 @@
     </div>
 </section>
 
-
+<script>
+         var audio = new Audio("/static/audio/카메라.wav"); // 음성 파일 경로
+        audio.load();
+        audio.volume = 1;
+        audio.play();
+</script>
 <script>
 
     function get_average(nums){

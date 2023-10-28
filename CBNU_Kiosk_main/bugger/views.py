@@ -231,6 +231,7 @@ def predicting_model():
     return joblib.load(model_obj.model.path)
 
 
+
 def classify(face_img):
     print(face_img.shape)
     features = []
@@ -301,29 +302,6 @@ def get_post(request):
     return render(request, 'bugger\parameter.html', data)
 
 
-def text_to_speech(request):
-    text = "안녕하세요, Google Cloud Text-to-Speech API 테스트입니다."
-
-    # Google Cloud Text-to-Speech API 클라이언트 설정
-    client = texttospeech.TextToSpeechClient()
-
-    # 텍스트를 음성으로 변환
-    synthesis_input = texttospeech.SynthesisInput(text=text)
-    voice = texttospeech.VoiceSelectionParams(
-        language_code="ko-KR", ssml_gender=texttospeech.SsmlVoiceGender.NEUTRAL
-    )
-    audio_config = texttospeech.AudioConfig(
-        audio_encoding=texttospeech.AudioEncoding.LINEAR16
-    )
-
-    response = client.synthesize_speech(
-        input=synthesis_input, voice=voice, audio_config=audio_config
-    )
-
-    # 오디오 데이터를 HTML 템플릿으로 전달
-    audio_data = response.audio_content.decode("utf-8")  # 오디오 데이터를 문자열로 디코딩
-
-    return render(request, "text_to_speech.html", {"audio_data": audio_data})
 
 
 from django.http import JsonResponse
@@ -389,3 +367,34 @@ def get_menu_info_by_name(request):
         return JsonResponse(menu_info)
     except ObjectDoesNotExist:
         return JsonResponse({'error': 'Menu not found'})
+
+from google.cloud import texttospeech
+import tempfile
+def text_to_speech(request):
+    text = request.GET.get('text', 'Hello, World!')
+
+    client = texttospeech.TextToSpeechClient()
+
+    synthesis_input = texttospeech.SynthesisInput(text=text)
+    voice = texttospeech.VoiceSelectionParams(
+        language_code='en-US', name='en-US-Wavenet-D',
+        ssml_gender=texttospeech.SsmlVoiceGender.NEUTRAL
+    )
+    audio_config = texttospeech.AudioConfig(
+        audio_encoding=texttospeech.AudioEncoding.LINEAR16
+    )
+
+    response = client.synthesize_speech(input=synthesis_input, voice=voice, audio_config=audio_config)
+    audio_data = response.audio_content
+
+    # Create a temporary audio file
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as temp_audio_file:
+        temp_audio_file.write(audio_data)
+
+    audio_file_url = temp_audio_file.name
+
+    # Return the URL to the client
+    return JsonResponse({'audio_url': audio_file_url})
+
+
+

@@ -25,6 +25,7 @@ SECRET_KEY = 'django-insecure-o-e8-735(u06xu@728r#0mvfi)3xt0lzouy9rr_lyyo-*9-s&8
 import os
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="C:/Users/lixxc/PycharmProjects/cbnu_kioskAi/CBNU_Kiosk_main/realnew-399713-2378aee3660a.json"
 print(os.environ["GOOGLE_APPLICATION_CREDENTIALS"])
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
