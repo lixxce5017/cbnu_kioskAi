@@ -168,12 +168,14 @@
     <nav class="navbar-expand-lg order-py-5">
         <!-- Portfolio Grid Items-->
         <ul class="tab_title topbar" style="text-align:center;">
-
-            <li class="on" id="menu_type--Whopper">
+            <li class="on" id="menu_type--New">
                 <h3 class="masthead-heading text-center text-uppercase text-red mb-0" style="pointer-events: none; ">신제품</h3>
             </li>
-            <li id="menu_type--bugger">
+            <li  id="menu_type--Whopper">
                 <h3 class="masthead-heading text-center text-uppercase text-red mb-0" style="pointer-events: none; ">와퍼&주니어</h3>
+            </li>
+            <li id="menu_type--bugger">
+                <h3 class="masthead-heading text-center text-uppercase text-red mb-0" style="pointer-events: none; ">버거</h3>
             </li>
             <li id="menu_type--Premium">
                 <h3 class="masthead-heading text-center text-uppercase text-red mb-0" style="pointer-events: none; ">프리미엄</h3>
@@ -181,18 +183,15 @@
             <li id="menu_type--side">
                 <h3 class="masthead-heading text-center text-uppercase text-red mb-0" style="pointer-events: none; ">사이드</h3>
             </li>
-            <li id="menu_type--best_menu">
-                <h3 class="masthead-heading text-center text-uppercase text-red mb-0" style="pointer-events: none; ">best menu</h3>
-            </li>
 
         </ul>
     </nav>
 <!-- 전체 정렬 div--->
  <div class="row justify-content-center">
         <!--와퍼 탭 --->
-        <div class="row justify-content-center" id="menu_content--Whopper" style="display: on;">
+        <div class="row justify-content-center" id="menu_content--Whopper" style="display: none;">
         {% for menu in Whopper_all %}
-            <div class="col-md-4 col-4">
+            <div class="col-md-3 col-3">
                 <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal{{menu.id}}">
                     <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                         <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
@@ -228,9 +227,9 @@
                                         <div style="text-align: left;">
                                             <!-- Portfolio Modal - Title-->
                                             <h1 class="menu-modal-title text-secondary text-uppercase">{{menu.title}}</h1>
-                                            <h1 class="menu-modal-en-title text-secondary text-uppercase">{{menu.en_title|default:'치킨&새우'}}</h1><br>
+
                                             <!-- Portfolio Modal - Text-->
-                                            <p class="mb-4 menu-modal-desc">{{menu.desc}}</p>
+                                            <p class="mb-4 menu-modal-desc"><h5>{{menu.desc}}</h5></p>
                                         </div>
                                         <button class="btn btn-in-modal btn-primary" data-bs-dismiss="modal" id="addToCart--{{menu.title}}">
                                             <i class="fas fa-xmark fa-fw"></i>
@@ -306,7 +305,7 @@
      <!-- 버거탭--->
       <div class="row justify-content-center" id="menu_content--bugger" style="display: none;">
         {% for menu in bugger_all %}
-            <div class="col-md-4 col-4">
+            <div class="col-md-3 col-3">
                 <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal{{menu.id}}">
                     <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                         <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
@@ -342,9 +341,8 @@
                                         <div style="text-align: left;">
                                             <!-- Portfolio Modal - Title-->
                                             <h1 class="menu-modal-title text-secondary text-uppercase">{{menu.title}}</h1>
-                                            <h1 class="menu-modal-en-title text-secondary text-uppercase">{{menu.en_title|default:'치킨&새우'}}</h1><br>
                                             <!-- Portfolio Modal - Text-->
-                                            <p class="mb-4 menu-modal-desc">{{menu.desc}}</p>
+                                            <p class="mb-4 menu-modal-desc"><h5>{{menu.desc}}</h5></p>
                                         </div>
                                         <button class="btn btn-in-modal btn-primary" data-bs-dismiss="modal" id="addToCart--{{menu.title}}">
                                             <i class="fas fa-xmark fa-fw"></i>
@@ -417,10 +415,12 @@
                     </div>
         {% endfor %}
     </div>
+
+
      <!-- 프리미엄--->
       <div class="row justify-content-center" id="menu_content--Premium" style="display: none;">
         {% for menu in Premium_all %}
-            <div class="col-md-2 col-2">
+            <div class="col-md-3 col-3">
                 <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal{{menu.id}}">
                     <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                         <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
@@ -456,9 +456,9 @@
                                         <div style="text-align: left;">
                                             <!-- Portfolio Modal - Title-->
                                             <h1 class="menu-modal-title text-secondary text-uppercase">{{menu.title}}</h1>
-                                            <h1 class="menu-modal-en-title text-secondary text-uppercase">{{menu.en_title|default:'치킨&새우'}}</h1><br>
+
                                             <!-- Portfolio Modal - Text-->
-                                            <p class="mb-4 menu-modal-desc">{{menu.desc}}</p>
+                                            <p class="mb-4 menu-modal-desc"><h5>{{menu.desc}}</h5><</p>
                                         </div>
                                         <button class="btn btn-in-modal btn-primary" data-bs-dismiss="modal" id="addToCart--{{menu.title}}">
                                             <i class="fas fa-xmark fa-fw"></i>
@@ -490,7 +490,7 @@
                                 <div class="modal-body">
                                     <div class="row">
                                         {% for subMenu in set_change_all %}
-                                            <div class="col-md-2 col-2">
+                                            <div class="col-md-4 col-4">
                                                 <div class="portfolio-item mx-auto">
                                                     <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                                                         <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
@@ -531,9 +531,9 @@
                     </div>
         {% endfor %}
     </div>
-     <div class="row justify-content-center" id="menu_content--best_menu" style="display: none;">
-        {% for menu in best_menu_all %}
-            <div class="col-md-2 col-2">
+      <div class="row justify-content-center" id="menu_content--New" style="display: on;">
+        {% for menu in New_all %}
+            <div class="col-md-3 col-3">
                 <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal{{menu.id}}">
                     <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                         <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
@@ -569,9 +569,9 @@
                                         <div style="text-align: left;">
                                             <!-- Portfolio Modal - Title-->
                                             <h1 class="menu-modal-title text-secondary text-uppercase">{{menu.title}}</h1>
-                                            <h1 class="menu-modal-en-title text-secondary text-uppercase">{{menu.en_title|default:'치킨&새우'}}</h1><br>
+
                                             <!-- Portfolio Modal - Text-->
-                                            <p class="mb-4 menu-modal-desc">{{menu.desc}}</p>
+                                            <p class="mb-4 menu-modal-desc"><h5>{{menu.desc}}</h5></p>
                                         </div>
                                         <button class="btn btn-in-modal btn-primary" data-bs-dismiss="modal" id="addToCart--{{menu.title}}">
                                             <i class="fas fa-xmark fa-fw"></i>
@@ -603,7 +603,7 @@
                                 <div class="modal-body">
                                     <div class="row">
                                         {% for subMenu in set_change_all %}
-                                            <div class="col-md-2 col-2">
+                                            <div class="col-md-4 col-4">
                                                 <div class="portfolio-item mx-auto">
                                                     <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                                                         <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
@@ -644,10 +644,11 @@
                     </div>
         {% endfor %}
     </div>
+
      <!-- 사이드 탭--->
       <div class="row justify-content-center" id="menu_content--side" style="display: none;">
         {% for menu in side_all %}
-            <div class="col-md-2 col-2">
+            <div class="col-md-3 col-3">
                 <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal{{menu.id}}">
                     <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                         <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
@@ -682,9 +683,9 @@
                                         <div style="text-align: left;">
                                             <!-- Portfolio Modal - Title-->
                                             <h1 class="menu-modal-title text-secondary text-uppercase">{{menu.title}}</h1>
-                                            <h1 class="menu-modal-en-title text-secondary text-uppercase">{{menu.en_title|default:'치킨&새우'}}</h1><br>
+
                                             <!-- Portfolio Modal - Text-->
-                                            <p class="mb-4 menu-modal-desc">{{menu.desc}}</p>
+                                            <p class="mb-4 menu-modal-desc"><h5>{{menu.desc}}</h5></p>
                                         </div>
                                         <button class="btn btn-in-modal btn-primary" data-bs-dismiss="modal" id="addToCart--{{menu.title}}">
                                             <i class="fas fa-xmark fa-fw"></i>
@@ -754,6 +755,14 @@
             </div>
         {% endfor %}
     </div>
+     <pre>
+         ㅤ
+         ㅤ
+         ㅤ
+         ㅤ
+         ㅤ
+         ㅤ
+     </pre>
 </div>
 
 

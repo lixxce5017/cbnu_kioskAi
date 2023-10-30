@@ -14,6 +14,7 @@ class Model(models.Model):
     
 class Menu(models.Model):
     BuggerType = (('bugger', " bugger"),
+                  ('New', 'New'),
                     ('Premium', 'Premium'),
                     ('drink', 'drink'),
                     ('side', 'side'),

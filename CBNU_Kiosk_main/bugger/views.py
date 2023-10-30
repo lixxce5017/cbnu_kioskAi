@@ -126,7 +126,7 @@ def young_order(request):
                'side_all': Menu.objects.filter(type__icontains="side"),
                'drink_all': Menu.objects.filter(type__icontains="drink"),
                'set_change_all': Menu.objects.filter(type__icontains="set_change"),
-               'best_menu_all': best_menu_all,
+               'New_all': Menu.objects.filter(type__icontains="New"),
                }
     print("시작 ", context, "context임")
     latest_customer = Customer.objects.order_by('-id').first()
