@@ -23,6 +23,7 @@ class Menu(models.Model):
                   ('old_B','old_B'),
                   ('old_P', 'old_P'),
                   ('old_W', 'old_W'),
+                  ('old_side','old_side')
                     )
     class Meta:
         ordering = ['-id']
@@ -32,7 +33,8 @@ class Menu(models.Model):
     
     price = models.IntegerField('가격', default='0')
     image = models.ImageField(upload_to='menu/images/', null=False)
-    
+
+
     desc = models.CharField(max_length=250, default="")
     type = models.CharField(max_length=20, choices=BuggerType, default=0)
     created = models.DateField(auto_now_add=True) 

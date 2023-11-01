@@ -123,8 +123,8 @@
             <li id="menu_type--old_P">
                 <h2 class="masthead-heading text-center text-uppercase text-black mb-0" style="pointer-events: none; ">고급버거</h2>
             </li>
-            <li id="menu_type--side">
-                <h2 class="masthead-heading text-center text-uppercase text-black mb-0" style="pointer-events: none; ">기타</h2>
+            <li id="menu_type--old_side">
+                <h2 class="masthead-heading text-center text-uppercase text-black mb-0" style="pointer-events: none; ">추가메뉴</h2>
             </li>
         </ul>
 </nav>
@@ -133,7 +133,7 @@
 <div id="stt"></div>
     <div class="row justify-content-center" id="menu_content--best_menu" style="display: none;">
         {% for menu in best_menu_all %}
-            <div class="col-md-5 col-5">
+            <div class="col-md-3 col-3">
                 <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal{{menu.id}}">
                     <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                         <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
@@ -247,7 +247,7 @@
 
         <div class="row justify-content-center" id="menu_content--old_W" style="display: on;">
         {% for menu in old_W_all %}
-            <div class="col-md-5 col-5">
+            <div class="col-md-3 col-3">
                 <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal{{menu.id}}">
                     <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                         <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
@@ -367,6 +367,7 @@
                         <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
                     </div>
                     <!-- Product image-->
+
                     <img class="card-img-top" id="{{menu.title}}--image" src="{{menu.image|fix_route|default:'https://dummyimage.com/450x300/dee2e6/6c757d.jpg'}}" alt="..." />
                     <!-- Product details-->
                     <div class="card-body p-4">
@@ -587,9 +588,9 @@
         {% endfor %}
     </div>
      <!-- 사이드 탭--->
-      <div class="row justify-content-center" id="menu_content--side" style="display: none;">
-        {% for menu in side_all %}
-            <div class="col-md-5 col-5">
+      <div class="row justify-content-center" id="menu_content--old_side" style="display: none;">
+        {% for menu in old_side_all %}
+            <div class="col-md-3 col-3">
                 <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal{{menu.id}}">
                     <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                         <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
@@ -624,7 +625,7 @@
                                         <div style="text-align: left;">
                                             <!-- Portfolio Modal - Title-->
                                             <h1 class="menu-modal-title text-secondary text-uppercase">{{menu.title}}</h1>
-                                            <h1 class="menu-modal-en-title text-secondary text-uppercase">{{menu.en_title|default:'치킨&새우'}}</h1><br>
+                                            <h3 class="menu-modal-en-title text-secondary text-uppercase">{{menu.en_title|default:'치킨&새우'}}</h3><br>
                                             <!-- Portfolio Modal - Text-->
                                             <p class="mb-4 menu-modal-desc">{{menu.desc}}</p>
                                         </div>
@@ -647,6 +648,8 @@
          ㅤ
          ㅤ
          ㅤ
+         ㅤ
+         ㅤ      ㅤ
          ㅤ
          ㅤ
      </pre>
@@ -922,6 +925,11 @@ function getUrlParameter(name) {
     let setMenuBtn = document.querySelectorAll('[id^=setMenuBtn]');
 
     const setMenuBtnClickHandle = (e) => {
+         var audio = new Audio("/static/audio/장바구니.wav"); // 음성 파일 경로
+      audio.load();
+      audio.volume = 1;
+      audio.play();
+
         e.preventDefault();
 
         var count = document.querySelector("#headingOne > button > h4 > sup").innerText;
@@ -971,7 +979,10 @@ function getUrlParameter(name) {
 
     const addCartButtonClickHandle = (e) => {
         e.preventDefault();
-
+         var audio = new Audio("/static/audio/장바구니.wav"); // 음성 파일 경로
+          audio.load();
+          audio.volume = 1;
+          audio.play();
         let id = e.target.id.split("--")[1];
         console.log("add " + id);
 
@@ -1066,7 +1077,10 @@ function getUrlParameter(name) {
 const sttaddCartButtonClickHandle = (menuInfo) => {
     // 'menuInfo'를 사용하여 함수를 실행합니다.
     console.log("add " + menuInfo.title);
-
+    var audio = new Audio("/static/audio/장바구니.wav"); // 음성 파일 경로
+      audio.load();
+      audio.volume = 1;
+      audio.play();
     // 'menuInfo'의 ID를 사용하여 cartElement를 찾습니다.
     var cartElement = document.getElementById('cart--' + menuInfo.id);
 
@@ -1181,36 +1195,16 @@ function handleSpeechRecognitionResult(result) {
         case '주문':
             order_now();
             break;
+        case '결제':
+            order_now();
+            break;
         case '와퍼':
             showMenu('Whopper');
             break;
-        case '실시':
-            getMenuInfoByName('qweqwe');
+        case '불고기와퍼':
+            getMenuInfoByName('불고기 와퍼');
             break;
-        case '실험 보고서 12':
-            getMenuInfoByName('실험버거12');
-            break;
-        case '실험복 52':
-            getMenuInfoByName('실험버거12');
-            break;
-        case '실험 버거 3':
-            getMenuInfoByName('실험버거3');
-            break;
-        case '실험 보고서 3':
-            getMenuInfoByName('실험버거12');
-            break;
-        case '실험 보고서 4':
-            getMenuInfoByName('실험버거12');
-            break;
-        case '실험 보고서':
-            getMenuInfoByName('실험버거4');
-            break;
-        case '실험 버거 4':
-            getMenuInfoByName('실험버거4');
-            break;
-        default:
-            // 에러 처리 또는 다른 처리 방법 추가
-            break;
+
     }
 }
 
