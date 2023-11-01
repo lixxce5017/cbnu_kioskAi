@@ -1117,7 +1117,9 @@ const sttaddCartButtonClickHandle = (menuInfo) => {
     }
 
     // 'cartElement'의 존재 여부를 다시 확인합니다.
-       // 'menuInfo'에서 가격을 가져오기 위해 수정된 부분
+
+
+        // 'menuInfo'에서 가격을 가져오기 위해 수정된 부분
         var price = parseFloat(menuInfo.price);
         if (!isNaN(price)) {
             var totalPriceElement = document.getElementById('total-money');
@@ -1221,16 +1223,6 @@ function handleSpeechRecognitionResult(result) {
             break;
         case '불고기 아파':
             getMenuInfoByName('불고기와퍼');
-            break;
-
-       case '치즈 어포':
-            getMenuInfoByName('치즈와퍼');
-            break;
-       case '치즈 오프':
-            getMenuInfoByName('치즈와퍼');
-            break;
-       case '치즈 목포':
-            getMenuInfoByName('치즈와퍼');
             break;
         case '치즈와퍼':
             getMenuInfoByName('치즈와퍼');
