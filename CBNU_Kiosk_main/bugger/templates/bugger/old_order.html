@@ -1083,7 +1083,9 @@ const sttaddCartButtonClickHandle = (menuInfo) => {
       audio.play();
     // 'menuInfo'의 ID를 사용하여 cartElement를 찾습니다.
     var cartElement = document.getElementById('cart--' + menuInfo.id);
-
+    var count = document.querySelector("#headingOne > button > h4 > sup").innerText;
+        count *= 1;
+        document.querySelector("#headingOne > button > h4 > sup").innerText = count + 1;
     if (cartElement === null) {
         let cartListArea = document.getElementById('cart-list');
         let newCartItem = document.createElement('div');
@@ -1115,12 +1117,7 @@ const sttaddCartButtonClickHandle = (menuInfo) => {
     }
 
     // 'cartElement'의 존재 여부를 다시 확인합니다.
-    if (cartElement !== null) {
-        var count = document.querySelector("#headingOne > button > h4 > sup").innerText;
-        count *= 1;
-        document.querySelector("#headingOne > button > h4 > sup").innerText = count + 1;
-
-        // 'menuInfo'에서 가격을 가져오기 위해 수정된 부분
+       // 'menuInfo'에서 가격을 가져오기 위해 수정된 부분
         var price = parseFloat(menuInfo.price);
         if (!isNaN(price)) {
             var totalPriceElement = document.getElementById('total-money');
@@ -1131,7 +1128,7 @@ const sttaddCartButtonClickHandle = (menuInfo) => {
                 totalPriceElement.innerHTML = '<h5>' + totalPrice + '</h5>';
             }
         }
-    }
+
 }
 
 
@@ -1180,10 +1177,22 @@ function handleSpeechRecognitionResult(result) {
         case '홈으로':
             location.href = '{% url 'bugger:home' %}';
             break;
-        case '버거':
-            showMenu('bugger');
+        case '일반버거':
+            showMenu('old_B');
+            break;
+       case '일반 보고':
+            showMenu('old_B');
             break;
         case '프리미엄':
+            showMenu('Premium');
+            break;
+        case '추천 메뉴':
+            showMenu('Premium');
+            break;
+        case '추천메뉴':
+            showMenu('Premium');
+            break;
+        case '추천':
             showMenu('Premium');
             break;
         case '사이드':
@@ -1202,9 +1211,49 @@ function handleSpeechRecognitionResult(result) {
             showMenu('Whopper');
             break;
         case '불고기와퍼':
-            getMenuInfoByName('불고기 와퍼');
+            getMenuInfoByName('불고기와퍼');
+            break;
+        case '불고기 와퍼':
+            getMenuInfoByName('불고기와퍼');
+            break;
+        case '불고기 어퍼':
+            getMenuInfoByName('불고기와퍼');
+            break;
+        case '불고기 아파':
+            getMenuInfoByName('불고기와퍼');
             break;
 
+       case '치즈 어포':
+            getMenuInfoByName('치즈와퍼');
+            break;
+       case '치즈 오프':
+            getMenuInfoByName('치즈와퍼');
+            break;
+       case '치즈 목포':
+            getMenuInfoByName('치즈와퍼');
+            break;
+        case '치즈와퍼':
+            getMenuInfoByName('치즈와퍼');
+            break;
+        case '치즈 와퍼':
+            getMenuInfoByName('치즈와퍼');
+            break;
+        case '치즈 어퍼':
+            getMenuInfoByName('치즈와퍼');
+            break;
+
+       case '치즈 어포':
+            getMenuInfoByName('치즈와퍼');
+            break;
+       case '치즈 오프':
+            getMenuInfoByName('치즈와퍼');
+            break;
+       case '치즈 목포':
+            getMenuInfoByName('치즈와퍼');
+            break;
+       case '치즈 아퍼':
+            getMenuInfoByName('치즈와퍼');
+            break;
     }
 }
 
