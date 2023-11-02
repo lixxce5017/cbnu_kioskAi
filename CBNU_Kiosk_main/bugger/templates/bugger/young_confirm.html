@@ -1,0 +1,262 @@
+{% extends 'index.html' %}
+
+{% load post_extras %}
+{% block content %}
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+
+
+    function go_pay() {
+        setTimeout(pay_now, 5000);
+    };
+
+    function pay_now() {
+        var form = document.getElementById("confirmed_order_submission");
+        var parm = new Array();
+
+        let carts = [
+                    {% for item in order_list %}
+                        {
+                            title: "{{ item.menu.title }}",
+                            cnt: "{{ item.cnt }}",
+                        },
+                    {% endfor %}
+                ]
+        var menu_list = new Array();
+        var menu_counts = new Array();
+        for (let i=0; i < carts.length; i++){
+            menu_list.push(carts[i].title);
+            menu_counts.push(carts[i].cnt);
+        }
+        parm.push( ['usage_type', "{{usage_type|safe}}"] );
+        parm.push( ['total_price', "{{total_price|safe}}"] );
+        parm.push( ['menu_list', menu_list] );
+        parm.push( ['menu_counts', menu_counts] );
+        parm.push( ['customer_id', "{{ customer_id|safe }}"] );
+
+        var input = new Array();
+        for (var i = 0; i < parm.length; i++) {
+            input[i] = document.createElement("input");
+            input[i].setAttribute("type", "hidden");
+            input[i].setAttribute('name', parm[i][0]);
+            input[i].setAttribute("value", parm[i][1]);
+            form.appendChild(input[i]);
+        }
+        document.body.appendChild(form);
+        form.submit();
+    }
+  var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+
+    function csrfSafeMethod(method) {
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    $.ajaxSetup({
+        beforeSend: function (xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+
+
+</script>
+
+<style>
+    .bottombar {
+        width: 100%;
+        position: fixed;
+        bottom: 0;
+        margin: auto;
+        align-items: center;
+        justify-content: center;
+        padding-top: 0.5rem;
+        padding-bottom: 0rem;
+    }
+    #totalPrice {
+        width: 600px;
+        border-style: solid;
+        border-color: gray;
+        border-width: 0px 0px 2px 0px;
+        margin: auto;
+        display : flex;
+        padding: 3% 0 0 0;
+    }
+    .cart-info {
+        border-radius: 35px 35px 0px 0px;
+        width: 100%;
+        padding: 1rem 1rem;
+    }
+    .payment {
+        width: 100%;
+        margin: auto;
+    }
+    .payment1 {
+        width: 100%;
+        margin: auto;
+        position: fixed;
+        top:0;
+    }
+
+    #card-pay {
+        width: 50%;
+        height: 10%;
+        color: #000000;
+        background-color: #EF8C47;
+    }
+    #app-pay {
+        width: 50%;
+        height: 10%;
+        color: #ffffff;
+        background-color: #C63720;
+    }
+    #cart-list > * {
+        color: #fff;
+        text-align: center;
+        font-size: 1.25rem;
+        padding-bottom: 0.5rem;
+
+    }
+    #cartElement {
+        text-align: left;
+        padding-left: 2rem;
+    }
+</style>
+<!-- Header-->
+<div id="stt"></div>
+<div class="py-3">
+	<div class="container px-1">
+        <div class="payment1">
+            <div class="row">
+                <h1 class="fw-bolder mb-3 text-start text-danger" style="padding-top: 2rem;" OnClick="window.history.back();">
+                    <i class="bi bi-chevron-left"></i>뒤로 가기</h1>
+            </div>
+            <div class="row" style="padding-top: 0.3rem;">
+                <h1 class="fw-bolder mt-4 mb-3 text-start" style="padding-left: 2rem; padding-bottom: 2rem;">주문 내역</h1><br>
+            </div>
+        </div>
+
+		<section class="py-3">
+            <div class="container my-3 py-3">
+                <div class="row gx-3">
+                    {% for item in order_list %}
+                        <div class='col-lg-4 col-4 mt-5'>
+                            <div class='card h-100 border-1'>
+                                <img class='card-img-top' src={{item.menu.image|fix_route|default:'https://dummyimage.com/600x400/403f40/d4d4d4.png'}} />
+                                <div class='card-body'>
+                                    <a class='text-decoration-none link-dark stretched-link text-center'>
+                                        <h3 class='card-title mb-3'>
+                                            <strong>{{item.menu.title}} </strong>
+                                        </h3>
+                                    </a>
+                                    <h4 class='card-text mb-0 text-center'>수량 : {{item.cnt}}</h4>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+	</div>
+</div>
+
+<section class="bottombar">
+    <div class="row gx-9 mt-1 mb-3" id="totalPrice">
+        <div class="col-7">
+            <h1 class="fw-bolder mt-3 mb-3 text-start" style="padding-left: 0.9rem;">총 주문 금액</h1>
+        </div>
+        <div class="col-5">
+            <h2 class="fw-bolder mt-3 mb-3 text-danger text-end" id="cart-total-money" style="padding-right: 1rem;">{{total_price}} 원</h2>
+        </div>
+    </div>
+    <div class="payment">
+        <div class="row">
+            <h2 class="fw-bolder mt-3 mb-3 text-start" style="padding-left: 5.5rem;">결제 수단선택</h2>
+        </div>
+
+        <!-- 카드 결제 -->
+        <div id="card-pay" class="py-5 mt-3" style="cursor:pointer; float:left;" onclick="go_pay();" data-bs-toggle="modal" data-bs-target="#portfolioModal_card">
+            <h1 class="fw-bolder text-center display-5">
+                <i class="bi bi-credit-card"></i> 💳 카드 결제
+            </h1>
+        </div>
+
+
+        <!-- 간편 결제 -->
+        <div id="app-pay" class="py-5 mt-3" style="cursor:pointer; float:left;" OnClick="go_pay();" data-bs-toggle="modal" data-bs-target="#portfolioModal_coupon">
+            <h1 class="fw-bolder text-center display-5">
+                <i class="bi bi-upc-scan"></i> 간편 결제
+            </h1>
+        </div>
+        <form id="confirmed_order_submission" action="{% url 'bugger:old_pay' %}" method="POST" enctype="multipart/form-data" style="display: none;">
+            {% csrf_token %}
+        </form>
+
+    </div>
+
+</section>
+
+
+<div class="portfolio-modal modal fade" id="portfolioModal_card" tabindex="-1" aria-labelledby="portfolioModal_card" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header border-0"></div>
+            <div class="modal-body text-center pb-5">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8">
+                            <!-- Portfolio Modal - Title-->
+                            <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">신용카드 결제</h2>
+                            <br>
+                            <span class="mb-4" style="font-size: 1.2em;">신용카드를 투입구에 넣어주세요</span>
+                            <br>
+                            <!-- Portfolio Modal - Image-->
+                            <img class="img-fluid rounded mb-5" src="/static/assets/img/card_example.PNG" alt="..." />
+                            <!-- Portfolio Modal - Text-->
+                            <button class="btn btn-secondary btn-lg" data-bs-dismiss="modal">
+                                <i class="fas fa-xmark fa-fw"></i> 결제 취소 </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="portfolio-modal modal fade" id="portfolioModal_coupon" tabindex="-1" aria-labelledby="portfolioModal_coupon" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header border-0"></div>
+            <div class="modal-body text-center pb-5">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8">
+                            <!-- Portfolio Modal - Title-->
+                            <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">모바일 쿠폰</h2>
+                            <br>
+                            <span class="mb-4" style="font-size: 1.2em;">모바일 쿠폰을 스캔해주세요</span>
+                            <br>
+                            <!-- Portfolio Modal - Image-->
+                            <img class="img-fluid rounded mb-5" src="/static/assets/img/coupon_example.PNG" alt="..." />
+                            <!-- Portfolio Modal - Text-->
+                            <button class="btn btn-secondary btn-lg" data-bs-dismiss="modal">
+                                <i class="fas fa-xmark fa-fw"></i> 결제 취소 </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+         var audio = new Audio("/static/audio/결제.wav"); // 음성 파일 경로
+        audio.load();
+        audio.volume = 1;
+        audio.play();
+</script>
+
+
+
+{% endblock content %}

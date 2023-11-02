@@ -16,6 +16,7 @@ urlpatterns = [
     path('get_menu_id_by_name', views.get_menu_id_by_name, name='get_menu_id_by_name'),
     path('get_menu_info_by_name', views.get_menu_info_by_name, name='get_menu_info_by_name'),
     path('text_to_speech/', views.text_to_speech, name='text_to_speech'),
+    path('young_confirm', views.young_confirm, name='young_confirm'),
 ]
 
 

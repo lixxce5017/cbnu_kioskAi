@@ -1179,39 +1179,32 @@ function handleSpeechRecognitionResult(result) {
         case '홈으로':
             location.href = '{% url 'bugger:home' %}';
             break;
-        case '일반버거':
-            showMenu('old_B');
-            break;
-       case '일반 보고':
-            showMenu('old_B');
-            break;
-        case '프리미엄':
-            showMenu('Premium');
-            break;
-        case '추천 메뉴':
-            showMenu('Premium');
-            break;
-        case '추천메뉴':
-            showMenu('Premium');
-            break;
-        case '추천':
-            showMenu('Premium');
-            break;
-        case '사이드':
-            showMenu('side');
-            break;
-        case '음료':
-            showMenu('drink');
+        case '뒤로':
+            location.href = '{% url 'bugger:home' %}';
             break;
         case '주문':
+            order_now();
+            break;
+        case '주문하기':
+            order_now();
+            break;
+       case '주문 하기':
             order_now();
             break;
         case '결제':
             order_now();
             break;
-        case '와퍼':
-            showMenu('Whopper');
+       case '결제 하기':
+            order_now();
             break;
+      case '결제하기':
+            order_now();
+            break;
+       case '둘째':
+            order_now();
+            break;
+
+
 
       case '불고기와퍼':
             getMenuInfoByName('불고기와퍼');
@@ -1342,8 +1335,22 @@ function handleSpeechRecognitionResult(result) {
           case '소고기 베이컨 와퍼':
             getMenuInfoByName('소고기베이컨와퍼');
             break;
-
-          case '속이 베이커 아파':
+         case '소고기 백호 마포':
+            getMenuInfoByName('소고기베이컨와퍼');
+            break;
+          case '소고기 뱅크 막혀':
+            getMenuInfoByName('소고기베이컨와퍼');
+            break;
+            case '속이 비커 아파':
+            getMenuInfoByName('소고기베이컨와퍼');
+            break;
+            case '속이 될 거 같아':
+            getMenuInfoByName('소고기베이컨와퍼');
+            break;
+            case '속이 뱅크 아파':
+            getMenuInfoByName('소고기베이컨와퍼');
+            break;
+            case '속이 뱅크 아파':
             getMenuInfoByName('소고기베이컨와퍼');
             break;
 
@@ -1489,6 +1496,29 @@ function handleSpeechRecognitionResult(result) {
         case '버섯 불고기 와퍼':
             getMenuInfoByName('버섯소고기와퍼');
             break;
+         case '벗어 속이 아파':
+            getMenuInfoByName('버섯소고기와퍼');
+            break;
+             case '버터 소고기 마포':
+            getMenuInfoByName('버섯소고기와퍼');
+            break;
+             case '소고기 마포':
+            getMenuInfoByName('버섯소고기와퍼');
+            break;
+             case '화서 소고기 와퍼':
+            getMenuInfoByName('버섯소고기와퍼');
+            break;
+            case '버섯 소고기 어플':
+            getMenuInfoByName('버섯소고기와퍼');
+            break;
+
+            case '버섯 소고기 목포':
+            getMenuInfoByName('버섯소고기와퍼');
+            break;
+        case '사 가지고 개 아파':
+            getMenuInfoByName('세가지고기와퍼');
+            break;
+
         case '세가지고기와퍼':
             getMenuInfoByName('세가지고기와퍼');
             break;
@@ -1625,6 +1655,127 @@ function handleSpeechRecognitionResult(result) {
 
             case '새 가지고 격포':
             getMenuInfoByName('세가지고기와퍼');
+            break;
+
+            case '치킨 버거':
+            getMenuInfoByName('치킨버거');
+            break;
+
+            case '치킨버거':
+            getMenuInfoByName('치킨버거');
+            break;
+
+            case '치킨 먹어':
+            getMenuInfoByName('치킨버거');
+            break;
+
+
+
+            case '고기 새우 버거':
+            getMenuInfoByName('고기새우버거');
+            break;
+
+            case '고기 새우버거':
+            getMenuInfoByName('고기새우버거');
+            break;
+
+            case '거기서 보고':
+            getMenuInfoByName('고기새우버거');
+            break;
+
+            case '고기새우버거':
+            getMenuInfoByName('고기새우버거');
+            break;
+
+            case '거기 새우버거':
+            getMenuInfoByName('고기새우버거');
+            break;
+
+            case '치킨베이컨버거':
+            getMenuInfoByName('치킨베이컨버거');
+            break;
+
+
+            case '치킨 베이컨 버거':
+            getMenuInfoByName('치킨베이컨버거');
+            break;
+
+            case '치킨 베이컨버거':
+            getMenuInfoByName('치킨베이컨버거');
+            break;
+
+            case '치킨 베이컨 버거':
+            getMenuInfoByName('치킨베이컨버거');
+            break;
+
+            case '치킨 베이컨 보고':
+            getMenuInfoByName('치킨베이컨버거');
+            break;
+
+            case '치킨베이컨 버거':
+            getMenuInfoByName('치킨베이컨버거');
+            break;
+
+
+            case '통새우버거':
+            getMenuInfoByName('통새우버거');
+            break;
+
+
+            case '통새우 버거':
+            getMenuInfoByName('통새우버거');
+            break;
+            case '통 새우 버거':
+            getMenuInfoByName('통새우버거');
+            break;
+            case '동생 보고':
+            getMenuInfoByName('통새우버거');
+            break;
+            case '동서구':
+            getMenuInfoByName('통새우버거');
+            break;
+            case '통수 보고':
+            getMenuInfoByName('통새우버거');
+            break;
+            case '충주 복어':
+            getMenuInfoByName('통새우버거');
+            break;
+            case '통 3부 보고':
+            getMenuInfoByName('통새우버거');
+            break;
+            case '동생 보고':
+            getMenuInfoByName('통새우버거');
+            break;
+            case '동생 보고':
+            getMenuInfoByName('통새우버거');
+            break;
+
+            case '콜라':
+            getMenuInfoByName('콜라');
+            break;
+
+             case '제로 콜라':
+            getMenuInfoByName('제로콜라');
+            break;
+
+            case '제로콜라':
+            getMenuInfoByName('제로콜라');
+            break;
+            case '치즈감자튀김':
+            getMenuInfoByName('치즈감자튀김');
+            break;
+            case '치즈감자 튀김':
+            getMenuInfoByName('치즈감자튀김');
+            break;
+            case '치즈 감자 튀김':
+            getMenuInfoByName('치즈감자튀김');
+            break;
+            case '치즈 감자튀김':
+            getMenuInfoByName('치즈감자튀김');
+            break;
+
+            case '치킨':
+            getMenuInfoByName('치킨');
             break;
     }
 }

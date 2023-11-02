@@ -166,6 +166,35 @@ def old_confirm(request):
 
     return render(request, 'bugger/old_confirm.html', context)
 
+def young_confirm(request):
+    context = {}
+    if request.method == "POST":
+        usage_type = request.POST.get('usage_type')
+        menu_list = request.POST.getlist('menu_list')[0].split(",")
+        menu_counts = list(map(int, request.POST.getlist('menu_counts')[0].split(",")))
+
+        print(menu_list)
+        print(menu_counts)
+
+        order_list = []
+        total_price = 0
+        for menu_title, cnt in zip(menu_list, menu_counts):
+            menu_obj = Menu.objects.filter(title__exact=menu_title)[0]
+            total_price += menu_obj.price * int(cnt)
+            order_list += [{'menu': menu_obj, 'cnt': cnt}]
+
+        context['usage_type'] = usage_type
+        context['total_count'] = sum(menu_counts)
+        context['order_list'] = order_list
+        context['customer_id'] = Customer.objects.order_by('-id').first()
+        context['total_price'] = total_price
+        print("확인임요")
+        print(context)
+    else:
+        pass
+
+    return render(request, 'bugger/young_confirm.html', context)
+
 
 from django.shortcuts import render
 from .models import Menu, Order, Customer

@@ -862,7 +862,7 @@
 
 <!-- 밑에 결제하는 부분 Section-->
 <section class="bottombar">
-    <form id="order_submission" action="{% url 'bugger:old_confirm' %}" method="POST" enctype="multipart/form-data">
+    <form id="order_submission" action="{% url 'bugger:young_confirm' %}" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
     </form>
     <!-- 주문한 상품--->
